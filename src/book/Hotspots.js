@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { tag } from '../ui/tags.js';
 
-// 书页上“会动的图”：在原图外画一圈呼吸的光边，并挂一个小标签。
+// 书页上的活页：在原图外画一圈呼吸的光边，并挂一个小标签（“图4.2-3 · 翻开活页”）。
 const vert = /* glsl */`
   varying vec2 vUv;
   void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
@@ -71,7 +71,7 @@ export class Hotspots {
       mesh.renderOrder = 2;
       mesh.userData.spot = s;
       book.group.add(mesh);
-      const label = tag(`✦ ${s.label || '让它动起来'}`, 'pill');
+      const label = tag(`✦ ${s.label || '翻开活页'}`, 'pill');
       label.at(mesh.position.x, mesh.position.y, mesh.position.z - d / 2 + 0.005);
       this.active.push({ spot: s, mesh, label, hover: 0 });
     }

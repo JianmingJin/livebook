@@ -229,3 +229,4 @@ export function guard(el, snap, onDrop) {
 
 export function note(text, cls = '') { return h('p', { class: `note ${cls}`, html: text }); }
 export function title(text) { return h('div', { class: 'bar-title' }, text); }
+

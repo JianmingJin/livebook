@@ -1,0 +1,374 @@
+[
+  {
+    "id": "20c22898-0d14-4684-89a1-d5e4b3012e99",
+    "title": "第八单元  金属和金属材料",
+    "rich_title": "第八单元  金属和金属材料",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "20c22898-0d14-4684-89a1-d5e4b3012e99",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.225+0800",
+    "update_time": "2025-01-26T10:20:25.225+0800",
+    "child_nodes": [
+      {
+        "id": "51f58ceb-586e-42f4-bea9-db111c8c3464",
+        "title": "课题1 金属材料",
+        "rich_title": "课题1 金属材料",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "20c22898-0d14-4684-89a1-d5e4b3012e99/51f58ceb-586e-42f4-bea9-db111c8c3464",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.242+0800",
+        "update_time": "2025-01-26T10:20:25.242+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "c2929d40-1e83-4217-9935-c3cfeb77df3f",
+        "title": "课题2 金属的化学性质",
+        "rich_title": "课题2 金属的化学性质",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "20c22898-0d14-4684-89a1-d5e4b3012e99/c2929d40-1e83-4217-9935-c3cfeb77df3f",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.265+0800",
+        "update_time": "2025-01-26T10:20:25.265+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "8001bb69-edae-4bfc-b470-709b5293dee4",
+        "title": "课题3 金属资源的利用和保护",
+        "rich_title": "课题3 金属资源的利用和保护",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "20c22898-0d14-4684-89a1-d5e4b3012e99/8001bb69-edae-4bfc-b470-709b5293dee4",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.284+0800",
+        "update_time": "2025-01-26T10:20:25.284+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "079870e1-bcc2-4b60-a0b5-d1a24210dc82",
+    "title": "实验活动5 常见金属的物理性质和化学性质",
+    "rich_title": "实验活动5 常见金属的物理性质和化学性质",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "079870e1-bcc2-4b60-a0b5-d1a24210dc82",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.303+0800",
+    "update_time": "2025-01-26T10:20:25.303+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "80e8ff53-6ebd-4c53-a933-0b922048113e",
+    "title": "跨学科实践活动7 垃圾的分类与回收利用",
+    "rich_title": "跨学科实践活动7 垃圾的分类与回收利用",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "80e8ff53-6ebd-4c53-a933-0b922048113e",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.319+0800",
+    "update_time": "2025-01-26T10:20:25.319+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "5bfa36f9-fc3a-48b0-bed0-111d58276961",
+    "title": "第九单元  溶液",
+    "rich_title": "第九单元  溶液",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "5bfa36f9-fc3a-48b0-bed0-111d58276961",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.335+0800",
+    "update_time": "2025-01-26T10:20:25.335+0800",
+    "child_nodes": [
+      {
+        "id": "af0489ff-358c-4c7c-ac65-5b353d0fcf9b",
+        "title": "课题1 溶液及其应用",
+        "rich_title": "课题1 溶液及其应用",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "5bfa36f9-fc3a-48b0-bed0-111d58276961/af0489ff-358c-4c7c-ac65-5b353d0fcf9b",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.351+0800",
+        "update_time": "2025-01-26T10:20:25.351+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "a010c457-f43d-422d-bf31-896fc9ba8536",
+        "title": "课题2 溶解度",
+        "rich_title": "课题2 溶解度",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "5bfa36f9-fc3a-48b0-bed0-111d58276961/a010c457-f43d-422d-bf31-896fc9ba8536",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.376+0800",
+        "update_time": "2025-01-26T10:20:25.376+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "a5ad7755-a1be-438e-9a4f-caa69831bef8",
+        "title": "课题3 溶质的质量分数",
+        "rich_title": "课题3 溶质的质量分数",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "5bfa36f9-fc3a-48b0-bed0-111d58276961/a5ad7755-a1be-438e-9a4f-caa69831bef8",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.394+0800",
+        "update_time": "2025-01-26T10:20:25.394+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "fbae5a62-7217-4e9d-b6e6-a0deb4804072",
+    "title": "实验活动6 一定溶质质量分数的氯化钠溶液的配制",
+    "rich_title": "实验活动6 一定溶质质量分数的氯化钠溶液的配制",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "fbae5a62-7217-4e9d-b6e6-a0deb4804072",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.412+0800",
+    "update_time": "2025-01-26T10:20:25.412+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "58675966-5946-462a-9e07-d0673e9fb0c0",
+    "title": "实验活动7 粗盐中难溶性杂质的去除",
+    "rich_title": "实验活动7 粗盐中难溶性杂质的去除",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "58675966-5946-462a-9e07-d0673e9fb0c0",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.429+0800",
+    "update_time": "2025-01-26T10:20:25.429+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "d8064cc1-1563-46ff-ad60-0f5cc3f0ae15",
+    "title": "跨学科实践活动8 海洋资源的综合利用与制盐",
+    "rich_title": "跨学科实践活动8 海洋资源的综合利用与制盐",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "d8064cc1-1563-46ff-ad60-0f5cc3f0ae15",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.444+0800",
+    "update_time": "2025-01-26T10:20:25.444+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "91cabe1b-399d-48d0-8bed-0a96e1eee1c0",
+    "title": "第十单元  常见的酸、碱、盐",
+    "rich_title": "第十单元  常见的酸、碱、盐",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "91cabe1b-399d-48d0-8bed-0a96e1eee1c0",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.462+0800",
+    "update_time": "2025-01-26T10:20:25.462+0800",
+    "child_nodes": [
+      {
+        "id": "8e3c6db3-7c6d-4cad-8acf-7a128fcd5c23",
+        "title": "课题1 溶液的酸碱性",
+        "rich_title": "课题1 溶液的酸碱性",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "91cabe1b-399d-48d0-8bed-0a96e1eee1c0/8e3c6db3-7c6d-4cad-8acf-7a128fcd5c23",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.479+0800",
+        "update_time": "2025-01-26T10:20:25.479+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "00052b9b-fab0-43a1-bed3-c1a8b1cd1c5f",
+        "title": "课题2 常见的酸和碱",
+        "rich_title": "课题2 常见的酸和碱",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "91cabe1b-399d-48d0-8bed-0a96e1eee1c0/00052b9b-fab0-43a1-bed3-c1a8b1cd1c5f",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.498+0800",
+        "update_time": "2025-01-26T10:20:25.498+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "65236477-f473-458f-98b3-4eb685d14af0",
+        "title": "课题3 常见的盐",
+        "rich_title": "课题3 常见的盐",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "91cabe1b-399d-48d0-8bed-0a96e1eee1c0/65236477-f473-458f-98b3-4eb685d14af0",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.516+0800",
+        "update_time": "2025-01-26T10:20:25.516+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "0f58ca41-df09-4dae-a6a7-c8cb21764833",
+    "title": "实验活动8 常见酸、碱的化学性质",
+    "rich_title": "实验活动8 常见酸、碱的化学性质",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "0f58ca41-df09-4dae-a6a7-c8cb21764833",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.535+0800",
+    "update_time": "2025-01-26T10:20:25.535+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "302ec6e3-0a21-4dba-9959-2df748408ed7",
+    "title": "跨学科实践活动9 探究土壤酸碱性对植物生长的影响",
+    "rich_title": "跨学科实践活动9 探究土壤酸碱性对植物生长的影响",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "302ec6e3-0a21-4dba-9959-2df748408ed7",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.556+0800",
+    "update_time": "2025-01-26T10:20:25.556+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "50da539a-b423-4a2e-9bd6-d0f4ff647254",
+    "title": "第十一单元  化学与社会",
+    "rich_title": "第十一单元  化学与社会",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "50da539a-b423-4a2e-9bd6-d0f4ff647254",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.571+0800",
+    "update_time": "2025-01-26T10:20:25.571+0800",
+    "child_nodes": [
+      {
+        "id": "f6f58692-8fec-4c83-82bd-65e503b2e067",
+        "title": "课题1 化学与人体健康",
+        "rich_title": "课题1 化学与人体健康",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "50da539a-b423-4a2e-9bd6-d0f4ff647254/f6f58692-8fec-4c83-82bd-65e503b2e067",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.587+0800",
+        "update_time": "2025-01-26T10:20:25.587+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "3cd7a3f0-5080-41c2-bc6c-e960f9a0fec9",
+        "title": "课题2 化学与可持续发展",
+        "rich_title": "课题2 化学与可持续发展",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "50da539a-b423-4a2e-9bd6-d0f4ff647254/3cd7a3f0-5080-41c2-bc6c-e960f9a0fec9",
+        "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+        "create_time": "2025-01-26T10:20:25.606+0800",
+        "update_time": "2025-01-26T10:20:25.606+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "0c526066-92a3-4d90-8e53-ab1288f14f37",
+    "title": "跨学科实践活动10 调查我国航天科技领域中新型材料、新型能源的应用",
+    "rich_title": "跨学科实践活动10 调查我国航天科技领域中新型材料、新型能源的应用",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "0c526066-92a3-4d90-8e53-ab1288f14f37",
+    "tree_id": "a58cd255-03b0-4b0b-88e5-2c0bedc3beda",
+    "create_time": "2025-01-26T10:20:25.624+0800",
+    "update_time": "2025-01-26T10:20:25.624+0800",
+    "child_nodes": null
+  }
+]

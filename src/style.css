@@ -4,7 +4,7 @@
   --paper: #fffdf8;
   --pep: #1f6fb8;          /* 人教版课本里的标题蓝 */
   --pep-soft: #dce9f7;
-  --live: #ff6a3d;         /* “会动”的提示色 */
+  --live: #ff6a3d;         /* 活页的提示色 */
   --seal: #c8341f;         /* 印章红 */
   --song: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
   --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
@@ -53,7 +53,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 body.lesson-on #hud-pager { opacity: 0; transform: translate(-50%, 20px); pointer-events: none; }
 body.lesson-on #hint, body.lesson-on #copy { opacity: 0; }
 
-/* ---------- 抽屉：目录 / 会动的图 ---------- */
+/* ---------- 抽屉：目录 / 这本书的活页 ---------- */
 #drawer { position: fixed; top: 64px; right: 16px; bottom: 16px; width: min(360px, calc(100vw - 32px)); z-index: 20; background: var(--paper); border-radius: 14px; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.45); display: flex; flex-direction: column; animation: slidein .35s cubic-bezier(.2,.8,.2,1); }
 #drawer[hidden] { display: none; }
 @keyframes slidein { from { transform: translateX(40px); opacity: 0; } }
@@ -344,7 +344,7 @@ body.theme-day .chip-live em { color: #c25a2a; }
 body.theme-day #hint { color: rgba(60, 50, 35, .7); }
 body.theme-day #copy { color: rgba(60, 50, 35, .45); }
 
-/* ================= 首页：书桌 ================= */
+/* ================= 首页：书架 ================= */
 body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body.home #viewctl { display: none; }
 #home { position: fixed; inset: 0; pointer-events: none; z-index: 5; font-family: var(--song); color: #2c3245; transition: opacity .5s; }
 #home > * { pointer-events: auto; }
@@ -352,7 +352,7 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 .home-top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: max(22px, env(safe-area-inset-top)) 28px 0; pointer-events: none; }
 .home-top > * { pointer-events: auto; }
 .home-brand b { display: block; font: 700 30px/1 var(--song); letter-spacing: .14em; color: #2c3245; }
-.home-brand span { display: block; margin-top: 8px; font: 15px/1.4 var(--song); color: #6b5f48; letter-spacing: .05em; }
+.home-brand span { display: block; margin-top: 10px; font: 20px/1.4 "Kaiti SC", "STKaiti", "KaiTi", var(--song); color: #4a3f2f; letter-spacing: .2em; }      /* 标语：用楷体，像题在书上的一句话 */
 /* 搜索：一条纸 */
 .home-search { position: relative; width: min(440px, 46vw); }
 .home-search input { width: 100%; box-sizing: border-box; border: 0; padding: 13px 18px; font: 15px/1.2 var(--song); color: #2c3245; background: #fdfaf1;
@@ -362,14 +362,15 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 .search-item { display: grid; grid-template-columns: 46px 1fr; grid-template-rows: auto auto; column-gap: 10px; padding: 9px 16px; text-decoration: none; color: inherit; }
 .search-item:hover { background: #f3ead6; }
 .search-item .k { grid-row: span 2; align-self: center; font: 12px/1 var(--sans); font-style: normal; text-align: center; padding: 5px 0; border-radius: 2px; border: 1px solid currentColor; color: #8a7d64; }
-.search-item .k-实验 { color: #c25a2a; }
+.search-item .k-活页 { color: #c25a2a; }
 .search-item b { font: 600 15px/1.3 var(--song); }
 .search-item span { font: 12px/1.4 var(--sans); color: #8a7d64; }
 .search-empty { padding: 12px 16px; color: #8a7d64; font-size: 14px; }
-/* 继续上次 / 接着学：桌上的便签 */
-.home-notes { position: absolute; left: 0; right: 0; bottom: 92px; display: flex; justify-content: center; gap: 28px; pointer-events: none; }
+/* 继续上次 / 接着学：贴在书架右边墙上的两张便签 */
+.home-notes { position: absolute; right: 44px; top: 128px; width: 262px; display: flex; flex-direction: column; gap: 26px; pointer-events: none; }
+@media (max-aspect-ratio: 11/10) { .home-notes { left: 0; right: 0; top: auto; bottom: 92px; width: auto; flex-direction: row; justify-content: center; } }
 .home-notes > * { pointer-events: auto; }
-.note-card { display: block; width: 270px; padding: 14px 18px 16px; text-decoration: none; color: #2c3245; background: #fdf3c4; border-radius: 1px;
+.note-card { display: block; width: 262px; box-sizing: border-box; padding: 14px 18px 16px; text-decoration: none; color: #2c3245; background: #fdf3c4; border-radius: 1px;
   box-shadow: 0 6px 14px rgba(90,70,20,.22); transform: rotate(-1.4deg); transition: transform .25s; position: relative; }
 .note-card.next { background: #e6f1fb; transform: rotate(1deg); }
 .note-card:hover { transform: rotate(0) translateY(-2px); }
@@ -378,7 +379,7 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 .note-card.next small { color: #3a6e9e; }
 .note-card b { display: block; font: 700 19px/1.35 "Hannotate SC", "Kaiti SC", var(--song); }
 .note-card span { display: block; margin-top: 6px; font: 12.5px/1.4 var(--sans); color: #6b5f48; }
-/* 书上的进度便签 */
+/* 书架上：鼠标停在一本书上时的小便签 */
 .tag3d.sticky { pointer-events: auto; cursor: pointer; background: #fdf3c4; color: #3a3f4e; padding: 8px 12px 9px; border-radius: 1px; box-shadow: 0 4px 10px rgba(90,70,20,.25);
   font: 13px/1.45 "Hannotate SC", "Kaiti SC", var(--song); text-shadow: none; white-space: nowrap; transform-origin: center; }
 .tag3d.sticky b { font: 700 15px/1.3 var(--song); }
@@ -395,11 +396,11 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 .author-chip img { width: 30px; height: 30px; border-radius: 50%; display: block; }
 .author-chip b { display: block; font: 600 13px/1.25 var(--song); letter-spacing: .03em; }
 .author-chip small { display: block; margin-top: 2px; font: 11px/1.2 var(--sans); color: #8a7d64; }
-.author-qr { position: absolute; left: 0; bottom: calc(100% + 10px); width: 168px; padding: 14px 14px 12px; box-sizing: border-box; background: #fdfaf1; border-radius: 2px; text-align: center;
+.author-qr { position: absolute; left: 0; bottom: calc(100% + 10px); width: 206px; padding: 14px 14px 12px; box-sizing: border-box; background: #fdfaf1; border-radius: 2px; text-align: center;
   box-shadow: 0 8px 22px rgba(90,70,40,.25); opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity .2s, transform .2s; }
-.author-qr img { width: 132px; height: 132px; display: block; margin: 0 auto; background: #fff; padding: 4px; box-sizing: content-box; margin-left: -4px; }
-.author-qr p { margin: 10px 0 0; font: 600 13px/1.3 var(--song); color: #2c3245; }
-.author-qr small { display: block; margin-top: 4px; font: 11px/1.3 var(--sans); color: #8a7d64; }
+.author-qr img { width: 132px; height: 132px; display: block; margin: 0 auto; background: #fff; padding: 4px; box-sizing: content-box; }
+.author-qr p { margin: 10px 0 0; font: 13px/1.3 var(--song); color: #2c3245; }
+.author-qr small { display: block; margin-top: 6px; font: 11px/1.3 var(--sans); color: #8a7d64; }
 .home-author.open .author-qr { opacity: 1; transform: none; pointer-events: auto; }
 @media (hover: hover) { .home-author:hover .author-qr { opacity: 1; transform: none; pointer-events: auto; } }
 /* 实验总览：一大张纸 */
@@ -410,7 +411,10 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 .ov-head h2 { margin: 0; font: 700 22px/1 var(--song); color: #1f4f8f; letter-spacing: .12em; }
 .ov-tabs { display: flex; gap: 6px; flex: 1; }
 .ov-tabs button { border: 1px solid transparent; background: none; padding: 7px 12px; font: 15px/1 var(--song); color: #6b5f48; border-radius: 2px; cursor: pointer; }
-.ov-tabs button.on { border-color: #1f4f8f; color: #1f4f8f; font-weight: 700; background: rgba(31,79,143,.05); }
+.ov-tabs button.on { border-color: var(--c, #1f4f8f); color: var(--c, #1f4f8f); font-weight: 700; background: rgba(31,79,143,.05); }
+.ov-tabs { flex-wrap: wrap; align-items: center; row-gap: 6px; }
+.ov-subj { margin: 0 2px 0 10px; padding: 4px 9px 3px; font: 700 13px/1 var(--song); letter-spacing: .2em; color: #fff; background: var(--c); border-radius: 5px 5px 0 0; }
+.ov-subj:first-child { margin-left: 0; }
 .ov-close { border: 0; background: none; font: 14px/1 var(--song); color: #8a7d64; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .ov-body { overflow: auto; padding: 8px 26px 30px; }
 .ov-body h3 { margin: 22px 0 12px; font: 700 17px/1 var(--song); color: #2c3245; }
@@ -470,3 +474,176 @@ canvas.chart { cursor: zoom-in; }
 .p-tab.skip b::after { content: '–'; font-size: 11px; }
 .board .p-tab.skip b { background: none; border: 1.2px dashed #b8ad97; color: transparent; position: relative; }
 .board .p-tab.skip b::after { content: '–'; color: #a99c84; font-size: 12px; position: absolute; left: 4px; top: 0; }
+
+/* 学生自己读刻度、填数（化学·电解水） */
+.read-card { margin: 6px 0 10px; padding: 8px 10px; background: #fbf8ef; border: 1px dashed #cdbf9c; border-radius: 3px; }
+.read-row { display: flex; gap: 14px; margin: 4px 0 8px; }
+.read-row label { font: 13px/1.4 var(--sans); color: #4b4f5c; }
+.read-in { width: 64px; padding: 4px 6px; font: 15px/1.2 var(--sans); border: 1px solid #c9bfa6; border-radius: 2px; background: #fff; }
+
+/* 不会被收进“怎么操作”的小字说明（近似值、安全提示） */
+.fineprint { margin: 6px 0 10px; font: 12px/1.6 var(--sans); color: #7b7262; }
+.fineprint.warn { color: #a8501a; background: #fbefe2; padding: 6px 8px; border-radius: 3px; }
+.q-title { margin: 8px 0 4px; font: 600 13.5px/1.6 var(--song); color: #2c3245; }
+
+/* ---------- 底部步骤栏：动手（蓝印）/ 演示、总结（深色放映条，红印 / 蓝印） ---------- */
+:root { --kai: "Kaiti SC", "STKaiti", "KaiTi", "楷体", "Songti SC", serif; --heat: #e8672a; --o2: #2f7fd8; --fuel: #3d8b5f; }
+.lbar { position: fixed; z-index: 12; bottom: 16px; left: calc(50% + 200px); transform: translateX(-50%); display: flex; align-items: center; gap: 12px;
+  width: min(820px, calc(100vw - 470px)); padding: 8px 12px 8px 10px; background: #fffdf7; border: 1px solid rgba(43,49,66,.22); border-top: 2px solid var(--pep);
+  box-shadow: 0 6px 20px rgba(60,40,10,.14); font: 16px/1.45 var(--kai); color: var(--ink); transition: background .35s, color .35s, border-color .35s; }
+body:not(.lesson-on) .lbar, body.predicting .lbar { display: none; }
+.lbar button { border: 0; background: none; font: 13px/1 var(--song); color: var(--ink2); cursor: pointer; padding: 6px 4px; white-space: nowrap; }
+.lbar button:hover { color: var(--pep); }
+.lb-seal { flex: none; font: 700 13px/1 var(--song); color: var(--pep); border: 1.6px solid currentColor; border-radius: 2px; padding: 4px 3px; writing-mode: vertical-rl; letter-spacing: .15em; transform: rotate(-4deg); }
+.lb-main { flex: 1; min-width: 0; }
+.lb-n { color: var(--pep); font: 700 15px/1 var(--song); margin-right: 2px; }
+.lb-steps { display: flex; gap: 4px; flex: none; }
+.lb-steps i { font: 12px/18px var(--song); font-style: normal; width: 19px; height: 19px; text-align: center; border-radius: 50%; color: #b8ad98; border: 1px solid #ddd3c0; transition: all .3s; box-sizing: border-box; }
+.lb-steps i.cur { color: #fff; background: var(--pep); border-color: var(--pep); }
+.lb-steps i.done { color: #fff; background: #5d7a57; border-color: #5d7a57; font-size: 0; }
+.lb-steps i.done::after { content: "✓"; font: 700 11px/17px var(--sans); }
+.lbar .lb-demo { color: var(--seal); font-weight: 700; border: 1.3px solid rgba(200,52,31,.5); border-radius: 2px; padding: 6px 8px; }
+.lbar .lb-demo:hover { color: #fff; background: var(--seal); }
+.lbar .lb-pause, .lbar .lb-exit, .lbar .lb-back { display: none; }
+.lbar.near.do .lb-back { display: inline; text-decoration: underline; text-underline-offset: 3px; }
+.lbar .lb-snd.off { text-decoration: line-through; opacity: .5; }
+/* 放映时：深色的一条，像在看片 */
+.lbar.film { background: #2b3142; color: #f4efe2; border-color: #2b3142; border-top-color: var(--seal); }
+.lbar.film .lb-seal { color: #ff8a6e; }
+.lbar.film.tour .lb-seal { color: #8fb8ff; } .lbar.film.tour { border-top-color: #6f9be8; }
+.lbar.film .lb-n { color: #ffb59f; } .lbar.film.tour .lb-n { color: #a9c8ff; }
+.lbar.film .lb-steps i { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.45); }
+.lbar.film .lb-steps i.cur { background: #f4efe2; color: #2b3142; border-color: #f4efe2; }
+.lbar.film .lb-steps i.done { background: rgba(255,255,255,.25); border-color: transparent; }
+.lbar.film .lb-demo { display: none; }
+.lbar.film .lb-pause, .lbar.film .lb-exit { display: inline; color: rgba(244,239,226,.8); }
+.lbar.film .lb-snd { color: rgba(244,239,226,.6); }
+.lbar.film.paused .lb-main::after { content: "（暂停）"; opacity: .6; }
+
+
+/* ---------- 观察卡：贴在物体旁边的纸签 ---------- */
+.tag3d.cond { text-shadow: none; white-space: nowrap; }
+.tag3d.cond .cc { background: #fffdf7; border-radius: 3px; padding: 5px 8px 6px; box-shadow: 0 3px 10px rgba(60,45,15,.2), 0 0 0 1px rgba(60,45,15,.08);
+  font: 14px/1.3 var(--kai); color: #2b3142; }
+.cc-t { display: flex; gap: 7px; align-items: center; }
+.cc-name { font: 700 14px/1.3 var(--song); letter-spacing: .02em; }
+.cc-more { margin-top: 4px; }
+/* 结果像盖上去的一枚小印：燃烧 = 朱红，不燃烧 / 熄灭 = 墨灰 */
+.cc-res { font: 700 12px/1 var(--song); color: #6b6f7a; border: 1.3px solid currentColor; border-radius: 2px; padding: 2px 3px 1px; transform: rotate(-6deg); margin-left: auto; animation: stampIn .35s cubic-bezier(.3,1.6,.5,1); }
+.cc-res.burn { color: var(--seal); }
+@keyframes stampIn { from { transform: rotate(-6deg) scale(1.8); opacity: 0; } to { transform: rotate(-6deg) scale(1); opacity: 1; } }
+.cc-obs { display: flex; align-items: center; gap: 4px; font-size: 13px; }
+.cc-obs b { font: 700 16px/1 var(--kai); color: var(--heat); }
+.cc-obs small { font-size: 11px; color: #8a7d64; margin-right: 6px; }
+.cc-th { width: 6px; height: 18px; border-radius: 3px; border: 1px solid #c9b9a0; position: relative; overflow: hidden; background: #fff; }
+.cc-th i { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(#ffb074, var(--heat)); }
+.cc-air { font-size: 12.5px; color: #8a8f9a; padding: 1px 6px; border-radius: 9px; border: 1px dashed #b9bcc4; }
+.cc-air.on { color: var(--o2); border: 1px solid rgba(47,127,216,.45); background: rgba(47,127,216,.07); }
+.cc-toks { display: flex; gap: 5px; }
+.tok { position: relative; overflow: hidden; font: 700 12.5px/1 var(--kai); padding: 5px 7px 4px; border-radius: 10px; color: #fff; }
+.tok.fuel.on { background: var(--fuel); } .tok.o2.on { background: var(--o2); } .tok.heat.on { background: var(--heat); }
+.tok.miss { color: #b3412a; background: #fff; border: 1.5px dashed #d1694f; padding: 3.5px 6px 2.5px; }
+.tok.na { color: #a9adb6; background: #fff; border: 1px dashed #c9ccd3; font-weight: 400; }
+.tok.heat i { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(232,103,42,.18); z-index: 0; }
+.tok.heat.on i { display: none; }
+.tok em { position: relative; font-style: normal; font-weight: 400; font-size: 11px; margin-right: 3px; }
+.cc-note { font-size: 12px; color: #8a7d64; margin-top: 3px; }
+
+/* ---------- 学案式面板（有底部步骤栏的实验） ---------- */
+#panel.xuean .progress-need, .board.xuean .progress-need { display: none; }
+.xuean .status { background: none; border-left: 2px solid var(--pep); border-radius: 0; color: #2b3142; font: 14.5px/1.65 var(--kai); padding: 2px 0 2px 10px; }
+.xuean table.data { border-collapse: collapse; width: 100%; font: 13px/1.45 var(--song); }
+.xuean table.data th { font: 700 12.5px/1.4 var(--song); color: #6d6455; border-bottom: 1.2px solid #2b3142; padding: 4px 4px; text-align: left; }
+.xuean table.data td { border-bottom: 1px solid rgba(43,49,66,.15); padding: 6px 4px; color: #2b3142; vertical-align: top; }
+.xuean table.data td b { color: var(--seal); font-weight: 700; }
+.xuean table.data tr.new td { animation: inkIn 1.2s ease-out; }
+@keyframes inkIn { from { background: rgba(31,111,184,.12); color: transparent; } 40% { color: inherit; } to { background: transparent; } }
+.think { margin: 4px 0 12px; padding: 10px 12px 6px; background: #fffaf0; border: 1px solid rgba(200,160,90,.35); border-radius: 3px; }
+.think-t { font: 700 15px/1 var(--song); color: var(--seal); letter-spacing: .1em; margin-bottom: 8px; }
+.think-t::before { content: "？"; display: inline-block; width: 20px; height: 20px; line-height: 20px; text-align: center; border: 1.4px solid currentColor; border-radius: 50%; font-size: 12px; margin-right: 6px; }
+.think-q { font: 700 14.5px/1.6 var(--song); color: #2b3142; margin: 8px 0; }
+.sum-ctx { font: 13.5px/1.75 var(--song); color: #3b4254; padding: 6px 10px; background: #fff; border-left: 2px solid #e3d6bb; }
+.sum-ctx b.y { color: var(--seal); } .sum-ctx b.n { color: #6b6f7a; }
+.think .btn-row .go { text-align: left; }
+.more { margin-top: 10px; border-top: 1px dashed rgba(120,100,60,.25); padding-top: 4px; }
+.more > summary { cursor: pointer; font: 13.5px/1.6 var(--song); color: #8a7d64; padding: 5px 0; }
+.more[open] > summary { color: var(--pep); }
+.more .fineprint { margin: 2px 0 8px; }
+.go.big-next { width: 100%; margin: 4px 0 12px; background: var(--seal); color: #fff; border: 0; font: 700 15px/1 var(--song); padding: 13px; border-radius: 3px; letter-spacing: .05em; }
+.go.big-next:hover { background: #a92a17; }
+
+/* ---------- 显示开关（只在声明了 toggles 的实验里出现） ---------- */
+#viewctl .show-tg { position: relative; }
+#viewctl .show-tg svg { display: block; }
+#viewctl .show-tg .slash { opacity: 0; transition: opacity .2s; }
+#viewctl .show-tg.off { opacity: .55; }
+#viewctl .show-tg.off .slash { opacity: 1; }
+/* 悬停说明：按钮左边一张小纸签 */
+#viewctl .show-tg::after { content: attr(data-tip); position: absolute; right: calc(100% + 8px); top: 50%; transform: translate(4px, -50%); white-space: nowrap; pointer-events: none;
+  font: 13px/1 var(--song); color: #2b3142; background: #fffdf7; padding: 7px 9px; border-radius: 3px; box-shadow: 0 2px 8px rgba(60,45,15,.18); opacity: 0; transition: opacity .15s, transform .15s; }
+#viewctl .show-tg:hover::after { opacity: 1; transform: translate(0, -50%); }
+#viewctl .show-tg:last-of-type { margin-bottom: 8px; }
+body.hide-steps .lbar.do { display: none; }          /* 步骤栏关掉：整条都不显示（放演示时的字幕栏照常出现） */
+.o2-read { width: 70px; height: 8px; border-radius: 4px; border: 1px solid rgba(47,127,216,.45); background: #fff; position: relative; overflow: hidden; }
+.o2-read i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--o2); }
+.cc-obs b.o2-num { color: var(--o2); }
+.xuean .read-row { display: flex; align-items: center; gap: 6px; font: 15px/1 var(--song); margin: 4px 0 6px; }
+.xuean .read-row .read-in { width: 72px; font: 16px/1 var(--kai); padding: 6px 8px; border: 1px solid #c9bda6; border-radius: 3px; }
+.xuean .read-row .go { margin-left: auto; }
+.cc-obs b.o2-dim { color: #6b6f7a; }
+
+/* 放大镜（kit/lens.js）：浮在鼠标旁边，里面是这个位置的分子 */
+.micro-lens { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; transform-origin: 0 100%;
+  filter: drop-shadow(0 6px 14px rgba(40, 36, 28, 0.22)); }
+.micro-lens .lens-cap { margin-top: 6px; max-width: 240px; padding: 3px 9px; border-radius: 4px; background: rgba(251, 248, 240, 0.95);
+  font: 12px/1.5 "Songti SC", serif; color: #3b4254; white-space: nowrap; width: max-content; box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+.micro-lens .lens-cap b { color: #23293a; }
+
+/* 反应特写（kit/reactview.js）：放在观察卡里 */
+.tag3d.cond .rx-view { width: 300px; }
+.rx-view canvas { box-shadow: inset 0 0 0 1px rgba(47, 52, 67, 0.25); }
+.rx-view .rx-eq { margin: 6px 0 2px; text-align: center; font: 600 17px/1.3 "Songti SC", serif; color: #23293a; transition: opacity 0.2s; }
+.rx-view .rx-eq .arr { letter-spacing: -2px; margin: 0 4px; color: #6b7080; }
+.rx-view .rx-eq .s-co2 { color: #3d4350; } .rx-view .rx-eq .s-h2o { color: #2f7fb8; } .rx-view .rx-eq .s-h2co3 { color: #c23a52; }
+.rx-view .rx-cap { font: 12px/1.5 "Songti SC", serif; color: #4a5060; text-align: center; min-height: 3em; white-space: normal; }
+.rx-view .rx-eq sub { font-size: 0.62em; vertical-align: -0.25em; }
+.rx-view .rx-cap b { color: #23293a; }
+
+/* 微观次元（kit/microworld.js）：外面褪成淡灰，纸花上打开一个圆形视窗 */
+.mw { position: fixed; inset: 0; z-index: 58; pointer-events: none; }
+.mw.live .mw-dim, .mw.live .mw-port, .mw.live .mw-close { pointer-events: auto; }
+.mw-dim { position: absolute; inset: 0; background: rgba(246, 242, 232, 0.42);
+  backdrop-filter: grayscale(0.95) blur(2.2px) brightness(1.06); -webkit-backdrop-filter: grayscale(0.95) blur(2.2px) brightness(1.06);
+  -webkit-mask-image: radial-gradient(circle at var(--fx) var(--fy), transparent 0 54px, #000 96px); mask-image: radial-gradient(circle at var(--fx) var(--fy), transparent 0 54px, #000 96px); }
+.mw-beam { position: absolute; left: 0; top: 0; pointer-events: none; filter: blur(3px); }
+.mw-port { position: absolute; border-radius: 50%; overflow: hidden; cursor: grab;
+  box-shadow: 0 0 0 2px rgba(255, 236, 196, 0.9), 0 0 0 7px rgba(140, 180, 255, 0.18), 0 0 46px 10px rgba(120, 160, 255, 0.35); }
+.mw-port:active { cursor: grabbing; }
+.mw-hud { position: absolute; text-align: center; pointer-events: none; }
+.mw-eq { font: 600 26px/1.2 "Songti SC", "Times New Roman", serif; color: rgba(236, 240, 250, 0.55); text-shadow: 0 1px 8px rgba(0,0,0,0.6); transition: color 0.3s, transform 0.3s; }
+.mw-eq.on { color: #fff; transform: scale(1.06); }
+.mw-eq sub { font-size: 0.6em; vertical-align: -0.25em; } .mw-eq .arr { margin: 0 6px; letter-spacing: -3px; opacity: 0.8; }
+.mw-eq .s-co2 { color: #d6dbe6; } .mw-eq .s-h2o { color: #8fd2ff; } .mw-eq .s-h2co3 { color: #ff9fb0; }
+.mw-cap { margin: 6px auto 0; max-width: 100%; font: 13px/1.5 "Songti SC", serif; color: rgba(230, 235, 246, 0.88); text-shadow: 0 1px 6px rgba(0,0,0,0.7); }
+.mw-cap b { color: #fff; }
+/* 圆窗（暗底）：化学式、字幕里按分子着色的字是给全息（浅底）配的深色——在暗底上反过来，保留色相、变成浅色 */
+.mw:not(.holo) .mw-eq span[style], .mw:not(.holo) .mw-cap span[style] { filter: invert(1) hue-rotate(180deg) saturate(1.3); }
+.mw-close { position: absolute; padding: 5px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.4); background: rgba(13, 21, 36, 0.7); color: #e8ecf5; font: 13px "Songti SC", serif; cursor: pointer; }
+.mw-scale { position: absolute; text-align: center; font: 12px "Songti SC", serif; color: #3b4254; letter-spacing: 0.08em; }
+.tag3d.pill.mw-go { cursor: pointer; pointer-events: auto; background: #1d2b45; color: #fff; border-color: #1d2b45; }
+/* 全息模式：分子浮在纸花上方；不挡鼠标（照样可以转视角） */
+.mw .mw-holo { position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none; }
+.mw.holo.live .mw-dim { pointer-events: none; }
+.mw.holo .mw-eq { color: rgba(35, 41, 58, 0.45); text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
+.mw.holo .mw-eq.on { color: #23293a; }
+.mw.holo .mw-eq .s-co2 { color: #3d4350; } .mw.holo .mw-eq .s-h2o { color: #2f7fb8; } .mw.holo .mw-eq .s-h2co3 { color: #c23a52; }
+.mw.holo .mw-cap { color: #3b4254; text-shadow: none; }
+.mw.holo .mw-cap b { color: #23293a; }
+
+/* 书架 ↔ 书：两边是同一个画面。拿书进来不换页面，书里的按钮慢慢浮出来；回书架时先收起按钮，换页面时不要黑底的加载页 */
+html.to-home, html.to-home body { background: #e9e1d3; }
+html.to-home #loader, html.to-home #hud-top, html.to-home #hud-pager, html.to-home #hint, html.to-home #copy { display: none; }
+body.book-enter #hud-top, body.book-enter #hud-pager, body.book-enter #hint, body.book-enter #copy, body.book-enter #viewctl { animation: lb-fadein .7s ease .15s both; }
+@keyframes lb-fadein { from { opacity: 0; } }
+body.shelf-leave #hud-top, body.shelf-leave #hud-pager, body.shelf-leave #hint, body.shelf-leave #copy, body.shelf-leave #viewctl { opacity: 0 !important; transition: opacity .3s; pointer-events: none; }
+.tag3d.sticky.slip { animation: none; transform-origin: left top; }

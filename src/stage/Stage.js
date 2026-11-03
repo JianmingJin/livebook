@@ -166,7 +166,23 @@ export class Stage {
     this.onResize?.();
   }
 
+  /** 镜头是不是已经停稳在机位上（换场景、截图之前等一等） */
+  settled(eps = 0.003, { parallax = false } = {}) {          // parallax：连鼠标视差也要停（截图换页面时要；同一个舞台里接着画时不用）
+    const r = this.rig;
+    return r.cur.target.distanceTo(r.target) < eps && r.cur.dir.distanceTo(r.dir) < eps && Math.abs(r.cur.dist - r.dist) < eps * 4 && (!parallax || r.parallax.length() < 0.02);
+  }
+
+  /** 把现在的画面截成一张 JPEG（data URL）：换页面时先拿它盖着，新页面画好了再揭开，就不会白一下 */
+  snapshot(w = innerWidth, h = innerHeight) {
+    if (this.post) this.post.render(0); else this.renderer.render(this.scene, this.camera);       // 截图要和渲染在同一段脚本里（WebGL 画完的缓冲区下一帧就清了）
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    c.getContext('2d').drawImage(this.renderer.domElement, 0, 0, w, h);
+    return c.toDataURL('image/jpeg', 0.86);
+  }
+
   start() {
+    if (this._started) return;          // 从书架拿书进来：书架那边已经开始画了，同一个舞台不再开第二个循环
+    this._started = true;
     const tmp = new THREE.Vector3();
     const loop = () => {
       this.timer.update();
@@ -175,7 +191,7 @@ export class Stage {
       r.cur.target.lerp(r.target, k);
       r.cur.dir.lerp(r.dir, k).normalize();
       r.cur.dist += (r.dist - r.cur.dist) * k;
-      r.parallax.lerp(r.pointer, 1 - Math.exp(-dt * 2));
+      r.parallax.lerp(this.calm ? new THREE.Vector2() : r.pointer, 1 - Math.exp(-dt * (this.calm ? 6 : 2)));      // calm：换场景前不跟着鼠标晃
 
       // 用户视角（平滑跟随）
       const u = this.user, uk = 1 - Math.exp(-dt * 10);

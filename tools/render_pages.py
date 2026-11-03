@@ -8,6 +8,7 @@
 """
 import os
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -47,6 +48,24 @@ BOOKS = {
         "first_body_index": 5,   # 目录页之后的第一页，查找章节标题从这里开始
         "page_offset": 4,        # 印刷页码 = PDF 页序 - 4
     },
+    "huaxue-9s": {
+        "code": "c9a",
+        "title": "化学 九年级上册",
+        "publisher": "人民教育出版社",
+        "pdf": LIB / "化学" / "九年级上册.pdf",
+        "toc": LIB / "化学" / "九年级上册.目录树.json",
+        "first_body_index": 5,
+        "page_offset": 6,
+    },
+    "huaxue-9x": {
+        "code": "c9b",
+        "title": "化学 九年级下册",
+        "publisher": "人民教育出版社",
+        "pdf": LIB / "化学" / "九年级下册.pdf",
+        "toc": LIB / "化学" / "九年级下册.目录树.json",
+        "first_body_index": 4,
+        "page_offset": 4,
+    },
 }
 
 HI_HEIGHT = 2048
@@ -56,6 +75,12 @@ LO_HEIGHT = 480
 def find_page(doc, title, start):
     """章节标题在正文中第一次出现的页（标题去掉“第N节”前缀后匹配）。"""
     key = title.split(" ", 1)[-1].replace("跨学科实践：", "")
+    m = re.match(r"(课题\s*\d+)", title)
+    if m:   # 化学：“课题2 氧气”——题名常在前文出现过，先找页面开头写着“课题2 + 题名”的那一页
+        head = re.sub(r"\s", "", m.group(1)) + re.sub(r"\s", "", key)
+        for i in range(start, doc.page_count):
+            if head in re.sub(r"\s", "", doc[i].get_text())[:160]:
+                return i
     for i in range(start, doc.page_count):
         text = doc[i].get_text().replace(" ", "").replace("　", "")
         if key.replace(" ", "") in text:

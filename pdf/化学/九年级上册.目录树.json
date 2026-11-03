@@ -1,0 +1,602 @@
+[
+  {
+    "id": "4345d47d-2f7a-4d0c-a693-fe6ab0cf6ec1",
+    "title": "绪论",
+    "rich_title": "绪论",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "4345d47d-2f7a-4d0c-a693-fe6ab0cf6ec1",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:56.969+0800",
+    "update_time": "2024-08-06T17:45:56.969+0800",
+    "child_nodes": [
+      {
+        "id": "273f1e00-6082-4c77-852f-896c76de8f2b",
+        "title": "化学使世界变得更加绚丽多彩",
+        "rich_title": "化学使世界变得更加绚丽多彩",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "4345d47d-2f7a-4d0c-a693-fe6ab0cf6ec1/273f1e00-6082-4c77-852f-896c76de8f2b",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:56.991+0800",
+        "update_time": "2024-08-06T17:45:56.991+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "264932b6-f2be-41db-8fdd-8e74f32702df",
+    "title": "第一单元 走进化学世界",
+    "rich_title": "第一单元 走进化学世界",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "264932b6-f2be-41db-8fdd-8e74f32702df",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.011+0800",
+    "update_time": "2024-08-06T17:45:57.011+0800",
+    "child_nodes": [
+      {
+        "id": "214b5cc2-f43b-41d8-b1c3-23929c032eb1",
+        "title": "课题1 物质的变化和性质",
+        "rich_title": "课题1 物质的变化和性质",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "264932b6-f2be-41db-8fdd-8e74f32702df/214b5cc2-f43b-41d8-b1c3-23929c032eb1",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.030+0800",
+        "update_time": "2024-08-06T17:45:57.030+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "a0169f24-1c82-44ea-b566-eae3d02bb5d8",
+        "title": "课题2 化学实验与科学探究",
+        "rich_title": "课题2 化学实验与科学探究",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "264932b6-f2be-41db-8fdd-8e74f32702df/a0169f24-1c82-44ea-b566-eae3d02bb5d8",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.051+0800",
+        "update_time": "2024-08-06T17:45:57.051+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "b36d9957-f2a2-4883-b2dd-3b2d60a76638",
+    "title": "第二单元 空气和氧气",
+    "rich_title": "第二单元 空气和氧气",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "b36d9957-f2a2-4883-b2dd-3b2d60a76638",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.069+0800",
+    "update_time": "2024-08-06T17:45:57.069+0800",
+    "child_nodes": [
+      {
+        "id": "daf1740c-41a0-48d6-9797-2ff207f3e9ba",
+        "title": "课题1 我们周围的空气",
+        "rich_title": "课题1 我们周围的空气",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "b36d9957-f2a2-4883-b2dd-3b2d60a76638/daf1740c-41a0-48d6-9797-2ff207f3e9ba",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.089+0800",
+        "update_time": "2024-08-06T17:45:57.089+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "8b09b67c-0830-4215-870d-64d1047b4f92",
+        "title": "课题2 氧气",
+        "rich_title": "课题2 氧气",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "b36d9957-f2a2-4883-b2dd-3b2d60a76638/8b09b67c-0830-4215-870d-64d1047b4f92",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.108+0800",
+        "update_time": "2024-08-06T17:45:57.108+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "436f417a-6a38-4eb0-95f1-f9b83947b861",
+        "title": "课题3 制取氧气",
+        "rich_title": "课题3 制取氧气",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "b36d9957-f2a2-4883-b2dd-3b2d60a76638/436f417a-6a38-4eb0-95f1-f9b83947b861",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.126+0800",
+        "update_time": "2024-08-06T17:45:57.126+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "887bb7a1-6799-4bc5-811e-7f0fe722c64b",
+    "title": "实验活动1 氧气的实验室制取与性质",
+    "rich_title": "实验活动1 氧气的实验室制取与性质",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "887bb7a1-6799-4bc5-811e-7f0fe722c64b",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.145+0800",
+    "update_time": "2024-08-06T17:45:57.145+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "445c12ee-e372-44c0-b9f1-288a389137c7",
+    "title": "跨学科实践活动1 微型空气质量“检测站”的组装与使用",
+    "rich_title": "跨学科实践活动1 微型空气质量“检测站”的组装与使用",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "445c12ee-e372-44c0-b9f1-288a389137c7",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.165+0800",
+    "update_time": "2024-08-06T17:45:57.165+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "fda22056-17a6-443c-b206-f9e7af897db1",
+    "title": "第三单元 物质构成的奥秘",
+    "rich_title": "第三单元 物质构成的奥秘",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "fda22056-17a6-443c-b206-f9e7af897db1",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.266+0800",
+    "update_time": "2024-08-06T17:45:57.266+0800",
+    "child_nodes": [
+      {
+        "id": "a2478aa2-7647-4355-8405-86a99b23ed8c",
+        "title": "课题1 分子和原子",
+        "rich_title": "课题1 分子和原子",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "fda22056-17a6-443c-b206-f9e7af897db1/a2478aa2-7647-4355-8405-86a99b23ed8c",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.287+0800",
+        "update_time": "2024-08-06T17:45:57.287+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "de9ee45a-b3ad-47fb-ab5c-ec3e20776fcf",
+        "title": "课题2 原子结构",
+        "rich_title": "课题2 原子结构",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "fda22056-17a6-443c-b206-f9e7af897db1/de9ee45a-b3ad-47fb-ab5c-ec3e20776fcf",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.310+0800",
+        "update_time": "2024-08-06T17:45:57.310+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "fd3d142e-d7a0-42ef-8f6c-bd39257d9b9a",
+        "title": "课题3 元素",
+        "rich_title": "课题3 元素",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "fda22056-17a6-443c-b206-f9e7af897db1/fd3d142e-d7a0-42ef-8f6c-bd39257d9b9a",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.332+0800",
+        "update_time": "2024-08-06T17:45:57.332+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "6988d67c-8bc3-4bdb-879c-2c399cb4610a",
+    "title": "跨学科实践活动2 制作模型并展示科学家探索物质组成与结构的历程",
+    "rich_title": "跨学科实践活动2 制作模型并展示科学家探索物质组成与结构的历程",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "6988d67c-8bc3-4bdb-879c-2c399cb4610a",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.351+0800",
+    "update_time": "2024-08-06T17:45:57.351+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "75b629c5-1db1-4ee6-a63d-0f9d7b4b566a",
+    "title": "第四单元 自然界的水",
+    "rich_title": "第四单元 自然界的水",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "75b629c5-1db1-4ee6-a63d-0f9d7b4b566a",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.370+0800",
+    "update_time": "2024-08-06T17:45:57.370+0800",
+    "child_nodes": [
+      {
+        "id": "40e33ed5-1699-49b9-8da7-2dfcfef3ed5f",
+        "title": "课题1 水资源及其利用",
+        "rich_title": "课题1 水资源及其利用",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "75b629c5-1db1-4ee6-a63d-0f9d7b4b566a/40e33ed5-1699-49b9-8da7-2dfcfef3ed5f",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.394+0800",
+        "update_time": "2024-08-06T17:45:57.394+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "38257481-f264-4802-b3ba-7700528b4dc5",
+        "title": "课题2 水的组成",
+        "rich_title": "课题2 水的组成",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "75b629c5-1db1-4ee6-a63d-0f9d7b4b566a/38257481-f264-4802-b3ba-7700528b4dc5",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.415+0800",
+        "update_time": "2024-08-06T17:45:57.415+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "ef2f943e-8c6e-4418-a1f3-f46b7839059f",
+        "title": "课题3 物质组成的表示",
+        "rich_title": "课题3 物质组成的表示",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "75b629c5-1db1-4ee6-a63d-0f9d7b4b566a/ef2f943e-8c6e-4418-a1f3-f46b7839059f",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.436+0800",
+        "update_time": "2024-08-06T17:45:57.436+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "86e09dde-a94c-4b57-8962-60bd3b110b18",
+    "title": "实验活动2 水的组成及变化的探究",
+    "rich_title": "实验活动2 水的组成及变化的探究",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "86e09dde-a94c-4b57-8962-60bd3b110b18",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.456+0800",
+    "update_time": "2024-08-06T17:45:57.456+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "e6dc79e5-faeb-4ea6-afe2-d54a9214df37",
+    "title": "跨学科实践活动3 水质检测及自制净水器",
+    "rich_title": "跨学科实践活动3 水质检测及自制净水器",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "e6dc79e5-faeb-4ea6-afe2-d54a9214df37",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.505+0800",
+    "update_time": "2024-08-06T17:45:57.505+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "a78f3112-1060-4846-9b70-7b9ffd86e14c",
+    "title": "第五单元 化学反应的定量关系",
+    "rich_title": "第五单元 化学反应的定量关系",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "a78f3112-1060-4846-9b70-7b9ffd86e14c",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.529+0800",
+    "update_time": "2024-08-06T17:45:57.529+0800",
+    "child_nodes": [
+      {
+        "id": "37e7f410-4987-4bc0-9e30-bb131874fb8d",
+        "title": "课题1  质量守恒定律",
+        "rich_title": "课题1  质量守恒定律",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "a78f3112-1060-4846-9b70-7b9ffd86e14c/37e7f410-4987-4bc0-9e30-bb131874fb8d",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.546+0800",
+        "update_time": "2024-08-06T17:45:57.546+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "ee371d63-17f8-41a8-b316-5caf48deab43",
+        "title": "课题2  化学方程式",
+        "rich_title": "课题2  化学方程式",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "a78f3112-1060-4846-9b70-7b9ffd86e14c/ee371d63-17f8-41a8-b316-5caf48deab43",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.566+0800",
+        "update_time": "2024-08-06T17:45:57.566+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "e0e46860-4e49-44de-86d1-bcfcbf404d96",
+    "title": "跨学科实践活动4 基于特定需求设计和制作简易供氧器",
+    "rich_title": "跨学科实践活动4 基于特定需求设计和制作简易供氧器",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "e0e46860-4e49-44de-86d1-bcfcbf404d96",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.585+0800",
+    "update_time": "2024-08-06T17:45:57.585+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "4bebb923-98d6-48d5-aca5-8ad70319fbb3",
+    "title": "第六单元 碳和碳的氧化物",
+    "rich_title": "第六单元 碳和碳的氧化物",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "4bebb923-98d6-48d5-aca5-8ad70319fbb3",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.612+0800",
+    "update_time": "2024-08-06T17:45:57.612+0800",
+    "child_nodes": [
+      {
+        "id": "99c67d4d-ce1b-4d03-ae43-bed29df06f24",
+        "title": "课题1  碳单质的多样性",
+        "rich_title": "课题1  碳单质的多样性",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "4bebb923-98d6-48d5-aca5-8ad70319fbb3/99c67d4d-ce1b-4d03-ae43-bed29df06f24",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.630+0800",
+        "update_time": "2024-08-06T17:45:57.630+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "3266203f-5d4b-4bba-a51b-4e2ddeb41283",
+        "title": "课题2  碳的氧化物",
+        "rich_title": "课题2  碳的氧化物",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "4bebb923-98d6-48d5-aca5-8ad70319fbb3/3266203f-5d4b-4bba-a51b-4e2ddeb41283",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.648+0800",
+        "update_time": "2024-08-06T17:45:57.648+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "d124e65f-b071-4481-9282-09f4585c5876",
+        "title": "课题3  二氧化碳的实验室制取",
+        "rich_title": "课题3  二氧化碳的实验室制取",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "4bebb923-98d6-48d5-aca5-8ad70319fbb3/d124e65f-b071-4481-9282-09f4585c5876",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.668+0800",
+        "update_time": "2024-08-06T17:45:57.668+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "63d2140a-a7dd-44e0-a103-a86bed3ad742",
+    "title": "实验活动3  二氧化碳的实验室制取与性质",
+    "rich_title": "实验活动3  二氧化碳的实验室制取与性质",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "63d2140a-a7dd-44e0-a103-a86bed3ad742",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.688+0800",
+    "update_time": "2024-08-06T17:45:57.688+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "3b24516d-b29e-4c14-aeb9-d7645d0e5829",
+    "title": "跨学科实践活动5 基于碳中和理念设计低碳行动方案",
+    "rich_title": "跨学科实践活动5 基于碳中和理念设计低碳行动方案",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "3b24516d-b29e-4c14-aeb9-d7645d0e5829",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.706+0800",
+    "update_time": "2024-08-06T17:45:57.706+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "c8258ac7-018e-460d-bf30-0ef65c82996b",
+    "title": "第七单元 能源的合理利用与开发",
+    "rich_title": "第七单元 能源的合理利用与开发",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "c8258ac7-018e-460d-bf30-0ef65c82996b",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.724+0800",
+    "update_time": "2024-08-06T17:45:57.724+0800",
+    "child_nodes": [
+      {
+        "id": "0df0851c-cddd-498f-8eb2-f4bbcf8e7ca9",
+        "title": "课题1 燃料的燃烧",
+        "rich_title": "课题1 燃料的燃烧",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "c8258ac7-018e-460d-bf30-0ef65c82996b/0df0851c-cddd-498f-8eb2-f4bbcf8e7ca9",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.744+0800",
+        "update_time": "2024-08-06T17:45:57.744+0800",
+        "child_nodes": null
+      },
+      {
+        "id": "fb80f495-e566-4ca3-9d70-fe71c7b32c97",
+        "title": "课题2 化石能源的合理利用",
+        "rich_title": "课题2 化石能源的合理利用",
+        "description": null,
+        "chapter_type": null,
+        "language": "zh-CN",
+        "custom_properties": {
+          "tree_type": "teachingmaterials"
+        },
+        "node_path": "c8258ac7-018e-460d-bf30-0ef65c82996b/fb80f495-e566-4ca3-9d70-fe71c7b32c97",
+        "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+        "create_time": "2024-08-06T17:45:57.764+0800",
+        "update_time": "2024-08-06T17:45:57.764+0800",
+        "child_nodes": null
+      }
+    ]
+  },
+  {
+    "id": "1d4f80a3-81ee-441f-a6cf-5fbf7edadfde",
+    "title": "实验活动4 燃烧条件的探究",
+    "rich_title": "实验活动4 燃烧条件的探究",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "1d4f80a3-81ee-441f-a6cf-5fbf7edadfde",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.784+0800",
+    "update_time": "2024-08-06T17:45:57.784+0800",
+    "child_nodes": null
+  },
+  {
+    "id": "f85c51a7-19f4-452b-b8a6-1607f20b8eff",
+    "title": "跨学科实践活动6 调查家用燃料的变迁与合理使用",
+    "rich_title": "跨学科实践活动6 调查家用燃料的变迁与合理使用",
+    "description": null,
+    "chapter_type": null,
+    "language": "zh-CN",
+    "custom_properties": {
+      "tree_type": "teachingmaterials"
+    },
+    "node_path": "f85c51a7-19f4-452b-b8a6-1607f20b8eff",
+    "tree_id": "9e0891e5-3e37-427b-9862-5d8956150f21",
+    "create_time": "2024-08-06T17:45:57.809+0800",
+    "update_time": "2024-08-06T17:45:57.809+0800",
+    "child_nodes": null
+  }
+]

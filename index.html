@@ -3,9 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>活页课本 · 物理 八年级下册</title>
+  <title>活页课本</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cpath d=%22M3 7q6-2 13 2v18q-7-4-13-2z%22 fill=%22%23f4ead8%22/%3E%3Cpath d=%22M29 7q-6-2-13 2v18q7-4 13-2z%22 fill=%22%23ff6a3d%22/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/src/style.css" />
+  <script>
+    // 从书里回到书架：书里最后一帧（合上的书）先盖在页面最上面，书架那边画好同一个画面再揭开（window.__dropSnap），换页面时不会白一下
+    (function () {
+      var d = document.documentElement;
+      window.__dropSnap = function () {};
+      try {
+        var S = sessionStorage, snap = S.getItem('livebook.snap');
+        if (S.getItem('livebook.homeFrom') && location.search.indexOf('book=') < 0) d.classList.add('to-home');
+        if (!snap) return;
+        S.removeItem('livebook.snap');
+        d.classList.add('snap');
+        var st = document.createElement('style');
+        st.textContent = 'html.snap::after{content:"";position:fixed;inset:0;z-index:1000;pointer-events:none;background:#e9e1d3 url("' + snap + '") center/100% 100% no-repeat;transition:opacity .28s ease}html.snap.snap-out::after{opacity:0}';
+        document.head.appendChild(st);
+        window.__dropSnap = function () { d.classList.add('snap-out'); setTimeout(function () { d.classList.remove('snap', 'snap-out'); st.remove(); }, 320); };
+        setTimeout(window.__dropSnap, 4000);          // 万一那边出了错，不能一直盖着
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <canvas id="c" tabindex="0" aria-label="3D 课本"></canvas>
@@ -18,11 +37,11 @@
   </div>
 
   <header id="hud-top">
-    <div class="brand"><b>活页课本</b><span id="book-title">物理 八年级下册</span></div>
+    <div class="brand"><b>活页课本</b><span id="book-title"></span></div>
     <div class="hud-actions">
-      <button id="btn-shelf" class="chip" title="回到书桌，换一本书">‹ 书桌</button>
+      <button id="btn-shelf" class="chip" title="回到书架，换一本书">‹ 书架</button>
       <button id="btn-toc" class="chip" title="目录 (T)">目录</button>
-      <button id="btn-live" class="chip chip-live" title="会动的图">✦ 会动的图 <em id="stamp-count">0/0</em></button>
+      <button id="btn-live" class="chip chip-live" title="这本书的活页">✦ 活页 <em id="stamp-count">0/0</em></button>
     </div>
   </header>
 
@@ -32,7 +51,7 @@
     <button id="btn-next" class="round" title="下一页 (→)" aria-label="下一页">›</button>
   </nav>
 
-  <p id="hint">点击或拖动书页翻页 · 发光的图可以“动起来”</p>
+  <p id="hint">点击或拖动书页翻页 · 发光的图是一张活页，点一下翻开</p>
 
   <aside id="drawer" hidden>
     <div class="drawer-head"><h2 id="drawer-title">目录</h2><button class="x" data-close>×</button></div>

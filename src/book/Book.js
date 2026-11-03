@@ -234,6 +234,19 @@ export class Book {
     return this.fly[k];
   }
 
+  /** 翻到第 target 张时会露出来的页：动画里那几张纸的正反面 + 目的地那个跨页（先把它们的贴图加载好，翻的时候不会露出白纸） */
+  turnPages(target, from = this.current) {
+    target = Math.max(0, Math.min(this.leafCount, Math.round(target)));
+    if (from === target) return [];
+    const dir = Math.sign(target - from), n = Math.abs(target - from), K = Math.min(n, 7), out = [];
+    for (let k = 0; k < K; k++) {
+      const off = K === 1 ? 0 : Math.round((k * (n - 1)) / (K - 1)), j = dir > 0 ? from + off : from - 1 - off;
+      out.push(this.front(j), this.back(j));
+    }
+    out.push(this.front(target), this.back(target - 1));
+    return out.filter((i) => i != null);
+  }
+
   /** 翻到第 target 张（翻很多张时只动画其中几张，其余“哗”地一下带过）。 */
   turnTo(target) {
     target = Math.max(0, Math.min(this.leafCount, Math.round(target)));
@@ -307,21 +320,28 @@ export class Book {
       a.time += dt;
       a.p = Math.min(1, a.time / a.total);
     }
-    const prog = a.drag ? a.p : ease(a.p);
-    const nL = a.from + (a.to - a.from) * prog, nR = this.leafCount - nL;
+    // 每张飞着的纸各自的进度：0 = 还躺在原来那一侧，1 = 落到另一侧
+    const K = a.items.length, lps = a.items.map((it) => (a.drag ? a.p : ease(Math.min(1, Math.max(0, (a.time - it.start) / it.dur)))));
+    // 两边的纸堆跟着这几张纸走：一张纸掀起来，它代表的那些页才从原来那一侧减掉；快落平了，才加到另一侧
+    // （以前按总进度挪：合着的书刚开始翻、封面还没掀起来，左边就先冒出一整摞空白页——看着像白了一下）
+    const per = Math.abs(a.to - a.from) / K;
+    let off = 0, on = 0;
+    for (const lp of lps) { off += per * smooth(0, 0.12, lp); on += per * smooth(0.88, 1, lp); }
+    const nL = a.dir > 0 ? a.from + on : a.from - off, nR = a.dir > 0 ? this.leafCount - a.from - off : this.leafCount - a.from + on;
     this._setStacks(nL, nR);
     const g = this.gut(nL, nR);
     // 底下的两页跟着纸堆高度走
     if (this.leftTop.visible) this.leftTop.pose(1, nL * T, nL * T, 0, g);
     if (this.rightTop.visible) this.rightTop.pose(0, nR * T, nR * T, 0, g);
 
-    for (const it of a.items) {
-      let lp = a.drag ? a.p : Math.min(1, Math.max(0, (a.time - it.start) / it.dur));
-      lp = a.drag ? lp : ease(lp);
-      const t = a.dir > 0 ? lp : 1 - lp;
-      const lift = (it.order + 1) * 0.00035;
-      it.leaf.pose(t, nR * T + T + lift, nL * T + T + lift, 0.55 * a.dir, g);
-    }
+    // 一次翻好几张：还没翻起来的那一侧，先翻的那张压在最上面；翻过去的那一侧，后翻过去的压在上面。
+    // （以前两侧都按“后翻的在上”：刚开始那一两帧，最后一张——快到目的页的那一页——平躺着盖在封面上，看着像白了一下）
+    const onTop = (o) => (o + 1) * 0.00035, under = (o) => (K - o) * 0.00035;
+    a.items.forEach((it, i) => {
+      const t = a.dir > 0 ? lps[i] : 1 - lps[i];
+      const liftR = a.dir > 0 ? under(it.order) : onTop(it.order), liftL = a.dir > 0 ? onTop(it.order) : under(it.order);
+      it.leaf.pose(t, nR * T + T + liftR, nL * T + T + liftL, 0.55 * a.dir, g);
+    });
 
     const finished = a.drag ? (a.release != null && a.p === a.release) : a.p >= 1;
     if (finished) {

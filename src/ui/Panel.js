@@ -136,6 +136,10 @@ export class Panel {
       need: (msg) => this.need(msg),
       unlock: () => this.unlock(),
       prediction: () => this.prediction,
+      // 给自己排步骤的实验用：当前提示（status + 题目）所在的块、面板本身、翻到第几步
+      now: this.nowEl,
+      el: this.el,
+      go: (i) => this.go(i),
     };
   }
 

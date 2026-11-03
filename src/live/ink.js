@@ -48,13 +48,45 @@ const hatch = (m, tint) => {
   return m;
 };
 
+// “纸本”画风（实验自己声明 style: 'paper'，不用后期）：器材是课本插图那样的白纸 + 一层淡淡的本色 + 暗处几道排线，
+// 颜色只留给实验要讲的那件看不见的东西（热、氧气、火……这些物体用 keep: true 保留原色）。
+let lessonStyle = null;
+export const setLessonStyle = (s) => { lessonStyle = s || null; };
+export const styleNow = () => lessonStyle || STYLE;
+const paperHatch = (m, tint) => {
+  m.onBeforeCompile = (sh) => {
+    sh.uniforms.uTint = { value: new THREE.Color(tint) };
+    sh.uniforms.uSpace = { value: 0.006 };
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vWP; varying vec3 vWN;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz; vWN = normalize(mat3(modelMatrix) * objectNormal);');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec3 uTint; uniform float uSpace; varying vec3 vWP; varying vec3 vWN;\nfloat hline(float x, float w){ float d = abs(fract(x) - 0.5); float aa = fwidth(x) * 1.2; return 1.0 - smoothstep(w - aa, w + aa, d); }')
+      .replace('#include <dithering_fragment>', `#include <dithering_fragment>
+        float lum = clamp(dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114)), 0.0, 1.0);
+        vec3 an = abs(normalize(vWN));
+        vec2 p = (an.x > an.y && an.x > an.z ? vWP.zy : an.y > an.z ? vWP.xz : vWP.xy) / uSpace;
+        float shade = smoothstep(0.35, 0.95, lum);                       // 0 暗面 … 1 受光面
+        vec3 paperC = mix(vec3(0.992, 0.985, 0.965), uTint, 0.3);        // 纸色 + 三成本色
+        vec3 base = mix(paperC * vec3(0.86, 0.87, 0.9), paperC, shade);  // 暗面只是略灰一点，像纸上的淡彩
+        float h1 = hline((p.x + p.y) * 0.7071, 0.07) * (1.0 - smoothstep(0.35, 0.6, shade));
+        float h2 = hline((p.x - p.y) * 0.7071, 0.06) * (1.0 - smoothstep(0.1, 0.25, shade));
+        gl_FragColor.rgb = mix(base, vec3(0.17, 0.19, 0.25), max(h1, h2) * 0.5);`);
+  };
+  m.customProgramCacheKey = () => 'paper1';
+  return m;
+};
+
 /** 上色材质。unique: true 时给一份独立的（要单独改颜色/透明度的物体用）。keep: true 时墨线画风下也保留颜色。 */
 export function paint(color, { unique = false, keep = false, ...opts } = {}) {
-  const key = `${color}|${keep}|${JSON.stringify(opts)}`;
+  const st = styleNow();
+  const key = `${st}|${color}|${keep}|${JSON.stringify(opts)}`;
   if (!unique && mats.has(key)) return mats.get(key);
-  const ink = STYLE === 'ink' && !keep && !opts.transparent && !opts.map;
-  const m = ink ? new THREE.MeshLambertMaterial({ color: 0xffffff, ...opts }) : new THREE.MeshToonMaterial({ color, gradientMap: ramp, ...opts });
+  const plain = !keep && !opts.transparent && !opts.map;
+  const ink = st === 'ink' && plain, paper = st === 'paper' && plain;
+  const m = ink || paper ? new THREE.MeshLambertMaterial({ color: 0xffffff, ...opts }) : new THREE.MeshToonMaterial({ color, gradientMap: ramp, ...opts });
   if (ink) hatch(m, color);
+  if (paper) paperHatch(m, color);
   if (!unique) { mats.set(key, m); shared.add(m); }
   return m;
 }

@@ -117,3 +117,40 @@ export function synthWave(n, fn) {
   for (let i = 0; i < n; i++) d[i] = fn(i / n);
   return d;
 }
+
+// ---------- 一次性的小音效（点火、盖上、条件亮起）：用完自己释放 ----------
+let muted = false;
+export const sfx = {
+  get muted() { return muted; },
+  mute(v = !muted) { muted = v; return muted; },
+  /** 呼的一声（点燃）：一段带通滤波的噪声，先涨后落 */
+  whoosh({ dur = 0.7, freq = 520, gain = 0.22 } = {}) {
+    if (muted) return;
+    const a = audio(), t = a.currentTime;
+    const buf = a.createBuffer(1, Math.ceil(a.sampleRate * dur), a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const src = a.createBufferSource(); src.buffer = buf;
+    const bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 0.7;
+    bp.frequency.setValueAtTime(freq * 0.5, t); bp.frequency.exponentialRampToValueAtTime(freq * 1.6, t + dur * 0.35); bp.frequency.exponentialRampToValueAtTime(freq * 0.7, t + dur);
+    const g = a.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + dur * 0.18); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(bp).connect(g).connect(a.destination); src.start(t); src.stop(t + dur + 0.05);
+  },
+  /** 叮（条件亮起、卡片翻面）。freq 越来越高就是一串上行的提示音 */
+  ding(freq = 880, { gain = 0.08, decay = 0.5 } = {}) {
+    if (muted) return;
+    const a = audio(), t = a.currentTime;
+    for (const [f, k] of [[freq, 1], [freq * 2.01, 0.25]]) {
+      const o = a.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+      const g = a.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain * k, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+      o.connect(g).connect(a.destination); o.start(t); o.stop(t + decay + 0.05);
+    }
+  },
+  /** 轻轻碰一下（铜片落在杯口、烧杯扣下）：很短的高频敲击 */
+  clink({ freq = 2400, gain = 0.06 } = {}) {
+    if (muted) return;
+    const a = audio(), t = a.currentTime;
+    const o = a.createOscillator(); o.type = 'triangle'; o.frequency.setValueAtTime(freq, t); o.frequency.exponentialRampToValueAtTime(freq * 0.8, t + 0.12);
+    const g = a.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + 0.2);
+  },
+};

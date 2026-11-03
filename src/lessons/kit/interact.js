@@ -66,10 +66,12 @@ export function draggable(root, drags, { onClick, taps = [], tip } = {}) {
     if (tip) { if (h) (big ? tip.loc(root, c.x, c.y + (sz.y / s) / 2 + 0.006, c.z - (sz.z / s) / 2) : tip.loc(root, c.x, c.y + (sz.y / s) * 0.6 + 0.012, c.z)).text(h); else tip.loc(root, 0, -9, 0); }
   };
   const all = () => [...drags, ...taps];
+  let hovered = null;
   return {
     items: all,          // 给测试脚本用：列出能拖 / 能点的东西
+    hovered: () => hovered,      // 给测试脚本用：鼠标现在停在哪件东西上
     down(ray, e) {
-      const hit = hitAny(ray, all().map((d) => d.obj));
+      const hit = hitAny(ray, all().filter((d) => d.enabled?.() !== false).map((d) => d.obj));
       if (!hit) { return onClick ? onClick(ray, e) : false; }
       const tap = taps.find((x) => x.obj === hit);
       if (tap) { showHint(null); tap.onTap?.(ray, e); return true; }
@@ -88,8 +90,9 @@ export function draggable(root, drags, { onClick, taps = [], tip } = {}) {
     },
     move(ray) {
       if (!active) {
-        const hit = hitAny(ray, all().map((d) => d.obj));
+        const hit = hitAny(ray, all().filter((d) => d.enabled?.() !== false).map((d) => d.obj));
         const item = hit && all().find((x) => x.obj === hit);
+        hovered = item || null;
         canvas().style.cursor = hit ? (taps.includes(item) ? 'pointer' : 'grab') : '';
         showHint(item && item.enabled?.() !== false ? item : null);
         return false;

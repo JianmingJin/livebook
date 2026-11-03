@@ -3,6 +3,7 @@ import * as ink from './ink.js';
 import { tag, tagFocus } from '../ui/tags.js';
 import { WorldNotebook } from './WorldNotebook.js';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { show, setShow, applyShow } from '../ui/prefs.js';
 
 // 实验界面怎么摆：panel（左侧面板）| page（书即学案）| desk（桌上实验本）| card（极简卡片）
 // 实验面板摆在哪：float（默认：左侧悬浮的纸卡）| stand（立在书上）| panel（旧的网页面板）| page / desk / card（试验过的世界内记录）
@@ -101,6 +102,7 @@ export class LiveLayer {
       reframe: () => requestAnimationFrame(() => this._reframe?.()),
       back: () => { this._lookExit = null; tagFocus(null); if (this._prevShot) { stage.shot(this._prevShot); this._prevShot = null; } },
     };
+    ink.setLessonStyle(def.style);          // 实验自己的画风（例如 'paper'），只在搭这个实验的时候生效
     const inst = def.create(ctx);
     scaler.add(inst.group);
 
@@ -213,11 +215,34 @@ export class LiveLayer {
     }
     ctx.ui = api;
     if (world) inst.mountWorld?.(api); else { inst.mount?.(api); this.panel.arrange?.(); }
+    // 实验声明了 toggles（例如 ['cards', 'steps']）：右下角视角按钮上面加两个显示开关；没声明的实验（物理）什么都不加
+    const toggles = [];
+    if (inst.toggles?.length) {
+      const ctl = document.getElementById('viewctl');
+      // 图标：观察卡片 = 一张带小尖角的标注卡；步骤栏 = 一张步骤清单（第一步打了勾）。关掉时加一道斜线
+      const svg = (body) => `<svg viewBox="0 0 22 22" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${body}<path class="slash" d="M4 18L18 4"/></svg>`;
+      const ICON = {
+        cards: svg('<path d="M5 4.5h12a2 2 0 0 1 2 2v6.5a2 2 0 0 1-2 2H10l-3.2 3v-3H5a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2z"/><path d="M6.5 8.3h9M6.5 11.3h5.5"/>'),
+        steps: svg('<path d="M3 5.8l1.6 1.6L7.4 4.4"/><circle cx="5" cy="11.2" r="1.5" fill="currentColor"/><circle cx="5" cy="16.6" r="1.5"/><path d="M10 5.9h9M10 11.2h9M10 16.6h6"/>'),      // 步骤清单：做完的打勾
+      };
+      const NAME = { cards: '观察卡片', steps: '底部步骤栏' };
+      for (const k of inst.toggles) {
+        const label = NAME[k];
+        const b = document.createElement('button');
+        b.className = 'show-tg'; b.innerHTML = ICON[k];
+        const sync = () => { b.classList.toggle('off', !show[k]); b.dataset.tip = `${label} · ${show[k] ? '显示中' : '已隐藏'}`; b.setAttribute('aria-label', `${label}：${show[k] ? '显示中，点一下隐藏' : '已隐藏，点一下显示'}`); };
+        b.onclick = (e) => { e.stopPropagation(); setShow(k, !show[k]); sync(); };
+        sync(); toggles.push(b);
+      }
+      ctl?.prepend(...toggles);
+      applyShow(true);
+    }
 
     this.hotspots.enabled = false;
     document.body.classList.add('lesson-on');
     document.body.classList.toggle('stand-ui', !!board);
-    this.active = { spot, def, inst, root, scaler, card, hole, crop, tags, nb, board, t: 0, from: figCenter, to: pageCenter, s, closing: false };
+    ink.setLessonStyle(null);
+    this.active = { spot, def, inst, root, scaler, card, hole, crop, tags, nb, board, toggles, t: 0, from: figCenter, to: pageCenter, s, closing: false };
     this.opening = false;
     // 实验搭好以后，按器材实际占的范围重新取景（实验里写的 size 只是估计，常常不准：器材出画或者太小）
     this._reframe = null;
@@ -293,6 +318,8 @@ export class LiveLayer {
       this.panel.setHost(null);
     }
     A.inst.dispose?.();
+    for (const b of A.toggles || []) b.remove();
+    applyShow(false);
     document.getElementById('c').style.cursor = '';
     for (const t of A.tags) t.remove();
     ink.disposeTree(A.root);

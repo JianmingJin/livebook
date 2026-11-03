@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 // 用真实浏览器操作活页课本（给 reviewer / 自动化用）。开发服务器要先开着：npm run dev
 //
 // 用法：node tools/browse.mjs <url路径> <步骤文件.json | -> [输出目录]
@@ -20,7 +21,9 @@
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
-const require = createRequire('/tmp/lbshot/package.json');
+// playwright-core 装在 ~/.cache/livebook-tools（/tmp 会被系统定期清掉）；找不到再用 /tmp/lbshot
+const PW_BASE = [`${process.env.HOME}/.cache/livebook-tools/package.json`, '/tmp/lbshot/package.json'].find((p) => existsSync(p.replace('package.json', 'node_modules/playwright-core/package.json'))) || '/tmp/lbshot/package.json';
+const require = createRequire(PW_BASE);
 const { chromium } = require('playwright-core');
 
 const [, , urlPath = '/', stepsArg = '[]', outDir = 'review/codex'] = process.argv;

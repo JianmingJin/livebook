@@ -12,25 +12,30 @@ import { bookmark, rememberLast } from './home/progress.js';
 
 const $ = (s) => document.querySelector(s);
 
-// 页面结构：没有 ?book= 就是首页（书桌）；有就是那本书
+// 页面结构：没有 ?book= 就是首页（书架）；有就是那本书
 const params = new URLSearchParams(location.search);
 const BOOK_ID = params.get('book');
-const content = getBook(BOOK_ID || 'wuli-8s');
 
-async function boot() {
+/**
+ * 打开一本书。从书架上拿书进来时不重新加载页面：沿用同一个舞台（stage），书架那本书已经放大落在书桌上、镜头也已经就位；
+ * 这边的书先藏着，封面贴图好了再露出来，然后调 handoff()——书架那边把自己那本收走。两本书一模一样大、同一个位置，看不出换过。
+ */
+async function bootBook(id, { stage = null, handoff = null } = {}) {
+  const content = getBook(id);
   const manifest = await (await fetch(`${content.base}book.json`)).json();
   $('#book-title').textContent = manifest.title;
   document.title = `活页课本 · ${manifest.title}`;
 
-  const stage = new Stage($('#c'));
+  stage ||= new Stage($('#c'));
   const textures = new PageTextures(content.base, manifest.pageCount, stage.renderer);
   const book = new Book(stage, manifest, textures);
+  if (handoff) book.group.visible = false;
   const hotspots = new Hotspots(stage, book, content.spots);
   const panel = new Panel($('#panel'));
   const live = new LiveLayer({ stage, book, textures, hotspots, panel, content, onChange: (open) => {
     updateUI();
     const a = live.active;
-    if (open && a) { const L = content.lessons[a.spot.lesson]; rememberLast({ book: content.id, page: a.spot.page, lesson: a.spot.lesson, title: L.title, where: `${manifest.title.replace('物理 ', '')} · ${L.fig} · ${L.sec}` }); bookmark.set(content.id, a.spot.page); }
+    if (open && a) { const L = content.lessons[a.spot.lesson]; rememberLast({ book: content.id, page: a.spot.page, lesson: a.spot.lesson, title: L.title, where: `${manifest.title} · ${L.fig} · ${L.sec}` }); bookmark.set(content.id, a.spot.page); }
   } });
   stage.updaters.add(() => updateTags(stage.camera));
 
@@ -54,7 +59,11 @@ async function boot() {
   bookShot(true);
 
   // ---------- 加载：先要封面和前几页 ----------
-  const firstPages = [0, 1, 2, 3, 4];
+  // 先要封面和前几页；一打开就要翻过去的（书签页、链接里指定的页），连同翻页动画里会露出来的那几张纸一起先加载——不然翻的时候露出白纸
+  const q0 = new URLSearchParams(location.hash.slice(1));
+  const startPage = q0.has('live') ? content.spots.find((x) => x.lesson === q0.get('live'))?.page : q0.has('p') ? Number(q0.get('p')) : bookmark.get(content.id);
+  const firstPages = [...new Set([0, 1, 2, 3, 4, ...(startPage != null ? book.turnPages(book.leafForPage(startPage), 0) : [])])];
+  if (startPage != null) textures.want(book.turnPages(book.leafForPage(startPage), 0).slice(-2));          // 目的地那个跨页的高清图也先要
   let started = false;
   textures.preload(firstPages, (p, firstReady) => {
     $('#loader').style.setProperty('--p', p);
@@ -62,6 +71,7 @@ async function boot() {
       started = true;
       for (const l of [book.leftTop, book.rightTop]) l.refresh();
       $('#loader').classList.add('done');
+      if (handoff) { book.group.visible = true; handoff(); }
       handleHash();
     }
   });
@@ -90,7 +100,7 @@ async function boot() {
     if (type === 'turned' && book.current > 0) {
       const pg = book.spread[1] ?? book.spread[0];
       bookmark.set(content.id, pg);
-      if (!live.isOpen) rememberLast({ book: content.id, page: pg, title: `${manifest.title.replace('物理 ', '')} ${pageLabel()}`, where: '接着往下翻' });
+      if (!live.isOpen) rememberLast({ book: content.id, page: pg, title: `${manifest.title} ${pageLabel()}`, where: '接着往下翻' });
     }
     if (type === 'turned' && pendingLesson) {
       const s = pendingLesson; pendingLesson = null;
@@ -112,7 +122,7 @@ async function boot() {
     book.turnTo(target);
   };
 
-  // ---------- 目录 / 会动的图 ----------
+  // ---------- 目录 / 这本书的活页 ----------
   const drawer = $('#drawer');
   const openDrawer = (kind) => {
     const body = $('#drawer-body');
@@ -136,11 +146,11 @@ async function boot() {
         const c = getBook(b.id);
         const done = Object.keys(c.lessons).filter((id) => stamps.has(id)).length;
         body.append(h('div', { class: `live-item ${b.id === content.id ? 'cur' : ''}`, onclick: () => { location.href = `?book=${b.id}`; } },
-          h('div', { class: 'seal book' }, b.title.replace('物理 ', '').replace('年级', '').replace('全一册', '')),
-          h('div', {}, h('h4', {}, b.title), h('p', {}, `会动的图 ${Object.keys(c.lessons).length} 个 · 已盖章 ${done}`))));
+          h('div', { class: 'seal book' }, b.vol.replace('年级', '').replace('全一册', '全')),
+          h('div', {}, h('h4', {}, b.title), h('p', {}, `活页 ${Object.keys(c.lessons).length} 张 · 已盖章 ${done}`))));
       }
     } else {
-      $('#drawer-title').textContent = '会动的图';
+      $('#drawer-title').textContent = '这本书的活页';
       const seen = new Set();
       for (const s of content.spots) {
         if (seen.has(s.lesson)) continue;
@@ -151,13 +161,38 @@ async function boot() {
           h('div', { class: `seal ${got ? 'got' : ''}` }, got ? '已做' : '未做'),
           h('div', {}, h('h4', {}, info.title), h('p', {}, `${info.fig} · 第 ${s.page - off} 页 · ${info.sec}`))));
       }
-      body.append(h('p', { class: 'note', style: 'padding: 12px 20px' }, '每个实验：先预测，再动手，做完掀开课本上的结论对照，盖一个章（观察、探究、测量或推理）。'));
+      body.append(h('p', { class: 'note', style: 'padding: 12px 20px' }, '每张活页：先预测，再动手，最后掀开课本上的结论对照，盖一个章（观察、探究、测量或推理）。'));
     }
     drawer.hidden = false;
   };
   $('#btn-toc').onclick = () => (!drawer.hidden && $('#drawer-title').textContent === '目录' ? (drawer.hidden = true) : openDrawer('toc'));
   $('#btn-live').onclick = () => openDrawer('live');
-  $('#btn-shelf').onclick = () => { location.href = location.pathname; };
+  // 回到书架：先合上书（开着活页就先收起），镜头回到合上的样子；把这一帧留给书架那边，换页面时先盖着，那边画好了再揭开——这本书接着从书桌上放回架上
+  let toShelf = false;
+  $('#btn-shelf').onclick = () => {
+    if (toShelf) return;
+    toShelf = true;
+    drawer.hidden = true; hideHint();
+    document.body.classList.add('shelf-leave');
+    if (live.isOpen) live.close();
+    stage.calm = true;          // 不跟着鼠标晃：两边同一个画面
+    const t0 = performance.now();
+    const wait = () => {
+      if (!live.isOpen && !book.busy && book.current !== 0) {
+        book.turnTo(0);
+        // 一边合书，镜头一边回到合上的样子（不等翻完再挪）
+        stage.shot({ target: new THREE.Vector3(book.W / 2, 0, 0.06), dir: new THREE.Vector3(0, Math.sin(THREE.MathUtils.degToRad(64)), Math.cos(THREE.MathUtils.degToRad(64))), dist: stage.fitDistance(book.W * 1.25, book.H * 1.2, 1.04) });
+      }
+      const settled = !live.isOpen && !book.busy && book.current === 0 && stage.settled(0.004, { parallax: true });
+      if (!settled && performance.now() - t0 < 4000) { requestAnimationFrame(wait); return; }
+      try {
+        sessionStorage.setItem('livebook.homeFrom', content.id);
+        sessionStorage.setItem('livebook.snap', stage.snapshot());
+      } catch { /* 隐私模式 / 存不下：照常换页面 */ }
+      location.href = location.pathname;
+    };
+    requestAnimationFrame(wait);
+  };
   drawer.querySelector('[data-close]').onclick = () => (drawer.hidden = true);
 
   // ---------- 指针：点/拖书页翻页，点发光的图打开实验 ----------
@@ -299,7 +334,7 @@ async function boot() {
     const q = new URLSearchParams(location.hash.slice(1));
     if (!q.has('live') && !q.has('p')) {      // 没指定：翻到上次的书签页
       const bm = bookmark.get(content.id);
-      if (bm) { hideHint(); setTimeout(() => gotoPage(bm), 500); }
+      if (bm) { hideHint(); setTimeout(() => gotoPage(bm), 420); }
       return;
     }
     if (q.has('live')) {
@@ -313,8 +348,14 @@ async function boot() {
   window.__lb = { stage, book, live, hotspots, textures };
 }
 
+// 从书架拿书进来以后（地址栏已经改成 ?book=），按浏览器的“后退”：回到书架（重新加载）
+addEventListener('popstate', () => location.reload());
 
-const start = BOOK_ID ? boot() : bootHome(new Stage($('#c')));
+
+const start = BOOK_ID ? bootBook(BOOK_ID) : (() => {
+  const stage = new Stage($('#c'));
+  return bootHome(stage, { enterBook: (id, handoff) => bootBook(id, { stage, handoff }) });
+})();
 start.catch((err) => {
   console.error(err);
   $('.loader-msg').textContent = '加载失败：' + err.message;
