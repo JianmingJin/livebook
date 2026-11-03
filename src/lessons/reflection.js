@@ -106,7 +106,7 @@ export default {
       pen.position.set(start.x, start.y, 0.003);
       pen.rotation.z = Math.atan2(-start.y, -start.x);
       const outEnd = { x: -inSide * Math.sin(i) * R * 1.12, y: Math.cos(i) * R * 1.12 };
-      F.pivot.rotation.y = -S.fold * deg;
+      F.pivot.rotation.y = S.fold * deg;          // 向后折：纸板 NOF 绕 ON 往后（离开看的人）转
       const folded = S.fold > 2;
       const toW = (x, y) => new THREE.Vector3(x, y, 0.0015);
       // 入射光总在不动的那半张纸上能看到（除非反向时入射在 F 上且 F 折了）
