@@ -8,6 +8,7 @@ import { draggable, rayToLocal } from './kit/interact.js';
 
 const ARM = 0.09;                                  // 横梁半长
 const WEIGHTS = [100, 50, 20, 20, 10, 5];          // 砝码盒（g）
+const NUT_C = 0.012, NUT_TRAVEL = 0.008, NUT_ROD = 0.026;     // 平衡螺母：中间位置离横梁端 12 mm，左右各走 8 mm（最靠里时刚好贴着横梁端），螺杆长 26 mm
 const DIV = 0.2;                                   // 标尺的分度值（g）
 const TICK = 0.1;                                  // 分度盘上一小格对应左右两盘相差多少克
 const THETA_PER_G = 0.024 / TICK;                  // 相差 1 g，横梁稳定后转多少（弧度），超过就碰到限位
@@ -91,7 +92,12 @@ export default {
     needle.position.set(0, 0, 0.037);
     beam.add(needle);
     const nuts = [];
-    for (const s of [-1, 1]) { const n = hull(new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.008, 10), paint(0xc9a347)), 0.001); n.rotation.z = Math.PI / 2; n.position.x = s * (ARM + 0.006); beam.add(n); nuts.push(n); const pk = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.02), new THREE.MeshBasicMaterial({ visible: false })); pk.userData.pick = true; n.add(pk); }       // 螺母只有 8 mm，加一圈看不见的拿取区
+    for (const s of [-1, 1]) {
+      // 横梁两端各伸出一小段螺杆，平衡螺母套在螺杆上左右旋动（不会旋进横梁里）
+      const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.0013, 0.0013, NUT_ROD, 8), paint(0xc8ced8)); rod.rotation.z = Math.PI / 2; rod.position.x = s * (ARM + NUT_ROD / 2); beam.add(rod);
+      const n = hull(new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.008, 10), paint(0xc9a347)), 0.001); n.rotation.z = Math.PI / 2; n.position.x = s * (ARM + NUT_C); beam.add(n); nuts.push(n);
+      const pk = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.014, 0.014), new THREE.MeshBasicMaterial({ visible: false })); pk.userData.pick = true; n.add(pk);       // 螺母只有 8 mm，加一圈看不见的拿取区
+    }
     // 两个托盘（挂在横梁两端，始终保持水平）
     const pans = [-1, 1].map((s) => {
       const g = new THREE.Group();
@@ -273,7 +279,7 @@ export default {
           p.position.set(x, y + 0.05 - 0.07, 0);
         }
         rider.position.x = gToX(S.rider);     // 游码左端对准读数
-        nuts.forEach((n) => (n.position.x = n.position.x > 0 ? ARM + 0.006 + S.nut * 0.008 : -(ARM + 0.006) + S.nut * 0.008));
+        nuts.forEach((n) => (n.position.x = n.position.x > 0 ? ARM + NUT_C + S.nut * NUT_TRAVEL : -(ARM + NUT_C) + S.nut * NUT_TRAVEL));
         tN.loc(group, 0, 0.06, 0.05).text(`指针${pointerDir()}`);
         const G = this._G;
         if (!G) return;
