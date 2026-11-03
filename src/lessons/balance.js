@@ -91,7 +91,7 @@ export default {
     needle.position.set(0, 0, 0.037);
     beam.add(needle);
     const nuts = [];
-    for (const s of [-1, 1]) { const n = hull(new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.008, 10), paint(0xc9a347)), 0.001); n.rotation.z = Math.PI / 2; n.position.x = s * (ARM + 0.006); beam.add(n); nuts.push(n); }
+    for (const s of [-1, 1]) { const n = hull(new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.008, 10), paint(0xc9a347)), 0.001); n.rotation.z = Math.PI / 2; n.position.x = s * (ARM + 0.006); beam.add(n); nuts.push(n); const pk = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.02), new THREE.MeshBasicMaterial({ visible: false })); pk.userData.pick = true; n.add(pk); }       // 螺母只有 8 mm，加一圈看不见的拿取区
     // 两个托盘（挂在横梁两端，始终保持水平）
     const pans = [-1, 1].map((s) => {
       const g = new THREE.Group();
@@ -177,7 +177,7 @@ export default {
         const g = Math.round(Math.max(0, Math.min(5, ((p.x - X0) / SPAN) * 5)) / DIV) * DIV;
         if (g !== S.rider) { S.rider = +g.toFixed(1); onRider?.(S.rider); }
       } },
-      ...nuts.map((n) => ({ obj: n, plane: 'xy', offset: 0, hint: '左右拖：旋动平衡螺母', onStart: (p) => { nut0 = p ? { x: p.x, v: S.nut } : null; }, onDrag: (p) => { if (nut0) A.nut?.(Math.round(Math.max(-1, Math.min(1, nut0.v + (p.x - nut0.x) / 0.1)) * 20) / 20); } })),     // 拧一下走 0.05（一小格的一半）
+      ...nuts.map((n) => ({ obj: n, plane: 'xy', offset: 0, hint: '左右拖：旋动平衡螺母', onStart: (p) => { nut0 = p ? { x: p.x, v: S.nut } : null; }, onDrag: (p) => { if (nut0) A.nut?.(Math.round(Math.max(-1, Math.min(1, nut0.v + (p.x - nut0.x) / 0.2)) * 20) / 20); } })),     // 拧一下走 0.05（一小格的一半）；拖 1 cm 走 0.05，拖得准
     ], { tip: tag('', 'pill') });
     const pickIn = (ray, objs) => { const hit = ray.intersectObjects(objs.filter((o) => o.visible), true)[0]; if (!hit) return null; for (let o = hit.object; o; o = o.parent) if (objs.includes(o)) return o; return null; };
     const tablePtr = draggable(group, [], { tip: tag('', 'pill'), taps: [
@@ -200,7 +200,7 @@ export default {
       view: { elev: 14, azim: -10, lookY: 0.45, margin: 1.06 },
       mount(ui) {
         const out = readout([{ key: 'p', label: '指针' }, { key: 'm', label: '砝码 + 游码', unit: 'g', secret: '自己数砝码、读游码' }]);
-        A.nut = (v, fromSlider) => { S.nut = Math.round(v * 100) / 100; if (!fromSlider) nut.set(Math.round(S.nut * 100)); if (S.obj >= 0 || S.onRight.length) { S.nutAfterLoad = true; ui.status('<b>称量过程中不能调节平衡螺母！</b>只能加减砝码、移动游码。'); } };
+        A.nut = (v, fromSlider) => { S.nut = Math.round(v * 100) / 100; if (!fromSlider) nut.set(Math.round(S.nut * 100)); if (S.calibrated && S.obj < 0 && !S.onRight.length && Math.abs(imbal()) > TICK / 2) { S.calibrated = false; G?.goal.undo('cal'); } if (S.obj >= 0 || S.onRight.length) { S.nutAfterLoad = true; ui.status('<b>称量过程中不能调节平衡螺母！</b>只能加减砝码、移动游码。'); } };
         const nut = slider('平衡螺母（也可以直接拖横梁两端的螺母）', { min: -100, max: 100, value: 60, fmt: (v) => (v > 0 ? `向右 ${v}` : v < 0 ? `向左 ${-v}` : '中间'), onInput: (v) => A.nut(v / 100, true) });
         const rid = slider(`游码（分度值 ${DIV} g，读游码左端；也可以直接拖游码）`, { min: 0, max: 5, step: DIV, value: 0, fmt: (v) => (v ? '已移动' : '零刻度'), onInput: (v) => { S.rider = Math.round(v / DIV) * DIV; } });
         onRider = (g) => rid.set(g);
@@ -273,7 +273,7 @@ export default {
           p.position.set(x, y + 0.05 - 0.07, 0);
         }
         rider.position.x = gToX(S.rider);     // 游码左端对准读数
-        nuts.forEach((n) => (n.position.x = n.position.x > 0 ? ARM + 0.006 + S.nut * 0.004 : -(ARM + 0.006) + S.nut * 0.004));
+        nuts.forEach((n) => (n.position.x = n.position.x > 0 ? ARM + 0.006 + S.nut * 0.008 : -(ARM + 0.006) + S.nut * 0.008));
         tN.loc(group, 0, 0.06, 0.05).text(`指针${pointerDir()}`);
         const G = this._G;
         if (!G) return;
