@@ -30,3 +30,15 @@ export async function removePdf(bookId) {
 /** 缓存的低清页：JPEG Blob */
 export const getLo = (bookId, i) => tx('lo', 'readonly', (s) => s.get(`${bookId}/${i}`)).catch(() => null);
 export const putLo = (bookId, i, blob) => tx('lo', 'readwrite', (s) => s.put(blob, `${bookId}/${i}`)).catch(() => {});
+/** 这台电脑上导入过的所有课本：[[bookId, { blob, name, size, pages, at }], …]（下载离线版时一起打包） */
+export async function allPdfs() {
+  try {
+    const db = await open();
+    return await new Promise((resolve) => {
+      const out = [], t = db.transaction('pdf', 'readonly');
+      t.objectStore('pdf').openCursor().onsuccess = (e) => { const c = e.target.result; if (c) { out.push([c.key, c.value]); c.continue(); } };
+      t.oncomplete = () => resolve(out);
+      t.onerror = () => resolve([]);
+    });
+  } catch (e) { return []; }
+}

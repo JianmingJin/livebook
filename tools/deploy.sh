@@ -5,7 +5,8 @@
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 export NO_PROXY="localhost,127.0.0.1,::1" no_proxy="localhost,127.0.0.1,::1"
-cd "$ROOT" && rm -rf dist && npm run build
+# 先做离线版（U 盘上双击打开的那个 HTML），放到 public/offline.html，网站上“下载离线版”用；再构建网站
+cd "$ROOT" && rm -rf dist && node tools/build_offline.mjs && npm run build
 # 线上不放课本书页，只留封面；用户自己导入课本 PDF（见 src/book/PageSource.js）
 "$ROOT/tools/strip_pages.sh" "$ROOT/dist"
 # 在别的目录里跑 wrangler：在项目目录里它会把 Vite 项目当成 Workers 来“自动配置”，改 package.json 和 vite.config.js

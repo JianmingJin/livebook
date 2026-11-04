@@ -5,7 +5,8 @@
 // 屏幕上还有：继续上次 / 接着学（贴在墙上的两张便签）、搜一节课或一张活页、活页总览。
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import { getBook, bookList } from '../content/index.js';
+import { getBook, bookList, getManifest, fileUrl, OFFLINE } from '../content/index.js';
+import { offlineButton } from './offlinePack.js';
 import { stamps, h } from '../ui/Panel.js';
 import { tag, updateTags } from '../ui/tags.js';
 import { progress, bookmark } from './progress.js';
@@ -30,9 +31,9 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   document.body.classList.add('home');
   document.title = '活页课本';
   const books = bookList().filter((b) => Object.keys(getBook(b.id).lessons).length);     // 还没有做好活页的书先不上架
-  const manifests = Object.fromEntries(await Promise.all(books.map(async (b) => [b.id, await (await fetch(`${getBook(b.id).base}book.json`)).json()])));
+  const manifests = Object.fromEntries(await Promise.all(books.map(async (b) => [b.id, await getManifest(b.id)])));
   // 有没有书页图片（开发时有；线上只放封面）：没有的话，活页总览里的缩略图只写图号
-  const pagesOk = Object.fromEntries(await Promise.all(books.map(async (b) => { try { const r = await fetch(`${getBook(b.id).base}lo/001.jpg`, { method: 'HEAD' }); return [b.id, r.ok && (r.headers.get('content-type') || '').startsWith('image/')]; } catch (e) { return [b.id, false]; } })));
+  const pagesOk = Object.fromEntries(await Promise.all(books.map(async (b) => { if (OFFLINE) return [b.id, false]; try { const r = await fetch(`${getBook(b.id).base}lo/001.jpg`, { method: 'HEAD' }); return [b.id, r.ok && (r.headers.get('content-type') || '').startsWith('image/')]; } catch (e) { return [b.id, false]; } })));
   const loader = new THREE.TextureLoader();
 
   // ---- 按科目分层（顺序照 books.json），第一科在最上面 ----
@@ -99,7 +100,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
     let x = -s.rowW / 2;
     s.items.forEach((it, j) => {
       const { b, W, T } = it, g = new THREE.Group();
-      const cover = loader.load(`${getBook(b.id).base}hi/000.jpg`, () => { g.userData.coverReady = true; });
+      const cover = loader.load(fileUrl(`${getBook(b.id).base}hi/000.jpg`), () => { g.userData.coverReady = true; });
       cover.colorSpace = THREE.SRGBColorSpace; cover.anisotropy = 8;
       const pages = new THREE.MeshLambertMaterial({ color: 0xf1ebde }), back = new THREE.MeshLambertMaterial({ color: b.side });
       const front = new THREE.MeshLambertMaterial({ map: cover });
@@ -157,6 +158,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
     authorCard(),
     h('footer', { class: 'home-foot' },
       h('button', { class: 'paper-btn', onclick: () => openOverview(books, manifests, subjects, pagesOk) }, '⊞ 活页总览'),
+      OFFLINE ? null : offlineButton(),          // 离线版里不用再下载
       h('span', { class: 'home-copy' }, '书里可以导入你自己下载的课本 PDF，文件只在这台电脑上使用')));
   document.body.append(ui);
   document.querySelector('#loader')?.classList.add('done');
@@ -384,14 +386,13 @@ function openOverview(books, manifests, subjects, pagesOk) {
 
 // 左下角的作者小签：公众号头像 + 名字；悬停（手机上点一下）展开二维码。只放在首页，书里和活页里不打扰。
 function authorCard() {
-  const base = import.meta.env.BASE_URL;
   const card = h('div', { class: 'home-author' },
     h('div', { class: 'author-qr', role: 'dialog', 'aria-label': '公众号二维码' },
-      h('img', { src: `${base}brand/gzh-qr.jpg`, width: 132, height: 132, alt: '德里克的 AI 教学实验室 公众号二维码' }),
+      h('img', { src: fileUrl('/brand/gzh-qr.jpg'), width: 132, height: 132, alt: '德里克的 AI 教学实验室 公众号二维码' }),
       h('p', {}, '新的活页做好了，先在这里说'),
       h('small', {}, '微信扫一扫，或在微信里长按识别')),
     h('button', { class: 'author-chip', 'aria-expanded': 'false', onclick: (e) => { e.stopPropagation(); toggle(); } },
-      h('img', { src: `${base}brand/gzh-avatar.jpg`, width: 30, height: 30, alt: '' }),
+      h('img', { src: fileUrl('/brand/gzh-avatar.jpg'), width: 30, height: 30, alt: '' }),
       h('span', {}, h('b', {}, '德里克的 AI 教学实验室'), h('small', {}, '公众号 · 用 AI 做真实的教学实践'))));
   const toggle = (open = !card.classList.contains('open')) => {
     card.classList.toggle('open', open);

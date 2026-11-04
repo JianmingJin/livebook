@@ -13,3 +13,5 @@ export const EDITIONS = {
   'huaxue-9x': { name: '义务教育教科书·化学 九年级 下册', press: PEP, rev: REV, year: YEAR, pages: 127, isbn: '', url: SMARTEDU('1998204c-f017-4f49-9000-0ba0b93d2a4d'), login: true },
 };
 
+/** 导入提示、下载离线版里写的书名：人教版《物理 八年级下册》 */
+export const bookName = (id, title) => `人教版《${(EDITIONS[id]?.name ?? title).replace('义务教育教科书·', '').replace(/ (上册|下册|全一册)$/, '$1')}》`;

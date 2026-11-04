@@ -2,7 +2,7 @@
 // 文件只存在这台电脑的浏览器里（IndexedDB），不上传；导入以后书页、插图、结论原文都用这份课本。
 import { PdfSource } from './PageSource.js';
 import { putPdf, removePdf } from './pdfStore.js';
-import { EDITIONS } from '../content/editions.js';
+import { EDITIONS, bookName as nameOf } from '../content/editions.js';
 
 const el = (tag, attrs = {}, ...kids) => { const e = Object.assign(document.createElement(tag), attrs); for (const k of kids.flat()) if (k != null) e.append(k); return e; };
 const QUIET = 'lb-imp-quiet';          // 点过“不用了”：不再自动出现
@@ -10,14 +10,14 @@ const QUIET = 'lb-imp-quiet';          // 点过“不用了”：不再自动�
 export function mountImport({ content, manifest, source }) {
   const actions = document.querySelector('#hud-top .hud-actions');
   if (!actions || document.getElementById('btn-import')) return;
-  const imported = source.kind === 'pdf', ed = EDITIONS[content.id];
+  const imported = source.kind === 'pdf', bundled = !!source.bundled, ed = EDITIONS[content.id];          // bundled：离线版，课本带在离线包里
   const pages = ed?.pages ?? manifest.pageCount;
-  const bookName = `人教版《${(ed?.name ?? manifest.title).replace('义务教育教科书·', '').replace(/ (上册|下册|全一册)$/, '$1')}》`;          // 人教版《物理 八年级下册》
+  const bookName = nameOf(content.id, manifest.title);          // 人教版《物理 八年级下册》
   const short = `${bookName}（2024 年版，${pages} 页）`;
-  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: imported ? '用的是导入的教材 PDF（只在本机）' : '导入这一版教材的 PDF，换成原书页' });
+  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: bundled ? '用的是离线包里带的教材 PDF' : imported ? '用的是导入的教材 PDF（只在本机）' : '导入这一版教材的 PDF，换成原书页' });
   actions.append(btn);
   const copy = document.getElementById('copy');          // 页脚
-  if (copy) copy.textContent = imported ? '原书页来自导入的教材 PDF，只在本机使用' : source.kind === 'placeholder' ? '需要原书页，可自行导入这一版教材的 PDF' : '课本页面来自本地教材文件，仅供个人学习使用';
+  if (copy) copy.textContent = bundled ? '原书页来自离线包里带的教材 PDF' : imported ? '原书页来自导入的教材 PDF，只在本机使用' : source.kind === 'placeholder' ? '需要原书页，可自行导入这一版教材的 PDF' : '课本页面来自本地教材文件，仅供个人学习使用';
   const input = el('input', { type: 'file', accept: 'application/pdf,.pdf', hidden: true });
   document.body.append(input);
 
@@ -55,6 +55,7 @@ export function mountImport({ content, manifest, source }) {
   btn.onclick = () => {
     if (!tip.hidden) return hide();
     if (!imported) return offer(false);
+    if (bundled) return show(false, el('p', { textContent: `用的是离线包里带的教材 PDF：${short}。` }), acts(['换一份', () => input.click()], ['关闭', hide, true]));
     show(false, el('p', { textContent: `用的是导入的教材 PDF：${short}。只在本机使用。` }),
       acts(['换一份', () => input.click()], ['移除', async () => { await removePdf(content.id); location.reload(); }, true], ['关闭', hide, true]));
   };

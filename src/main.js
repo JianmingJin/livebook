@@ -8,7 +8,7 @@ import { Hotspots } from './book/Hotspots.js';
 import { LiveLayer } from './live/LiveLayer.js';
 import { Panel, stamps, h } from './ui/Panel.js';
 import { updateTags } from './ui/tags.js';
-import { getBook, bookList } from './content/index.js';
+import { getBook, bookList, getManifest } from './content/index.js';
 import { bootHome } from './home/Home.js';
 import { bookmark, rememberLast } from './home/progress.js';
 
@@ -24,7 +24,7 @@ const BOOK_ID = params.get('book');
  */
 async function bootBook(id, { stage = null, handoff = null } = {}) {
   const content = getBook(id);
-  const manifest = await (await fetch(`${content.base}book.json`)).json();
+  const manifest = await getManifest(content.id);
   $('#book-title').textContent = content.full;
   document.title = `活页课本 · ${content.full}`;
 

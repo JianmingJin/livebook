@@ -1,22 +1,35 @@
 // 书页从哪来（三种来源，按顺序取）：
 //   1. 用户导入的课本 PDF：在浏览器里当场渲染，文件存在本机（IndexedDB），不上传；
+//      离线版（U 盘上双击打开）还可以带在离线包里：books/<id>.js（下载离线包时把这台电脑上导入的 PDF 放进去）；
 //   2. 本地渲染好的书页图片（开发时 public/books/<id>/hi|lo/NNN.jpg；线上只有封面 000）；
 //   3. 都没有：我们自己画的占位页（自己的纸、页眉页码、淡灰线代替正文、活页的位置留着图号）。
 // 每种来源都提供：image(kind, i) → 上下翻转好的 ImageBitmap（给 three.js 贴图）；url(kind, i) → 图片地址（给界面里的截图用，没有就是 null）。
 import * as pdfjs from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { getPdf, getLo, putLo } from './pdfStore.js';
+import { OFFLINE, OFFLINE_DATA, fileUrl } from '../content/index.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+const fromB64 = (s) => (Uint8Array.fromBase64 ? Uint8Array.fromBase64(s) : Uint8Array.from(atob(s), (c) => c.charCodeAt(0)));
+// 离线版：双击打开的网页不能从文件夹里读文件、起 worker，pdf.js 要的字库、解码器、worker 代码都打包在 HTML 里
+class EmbeddedData {
+  async fetch({ kind, filename }) {
+    const s = OFFLINE_DATA.pdfjs[kind]?.[filename];
+    if (!s) throw new Error(`离线版没有带这个文件：${filename}`);
+    return fromB64(s);
+  }
+}
+let offlinePort = null;
+const offlineWorker = () => (offlinePort ||= new Worker(workerUrl, { type: 'module' }));          // 离线版里 workerUrl 是 data: 地址（blob: 的模块 worker 在双击打开的网页里起不来）
 const HEIGHT = { hi: 2048, lo: 480 };          // 和 tools/render_pages.py 一样
 const pad = (i) => String(i).padStart(3, '0');
 const flip = (src) => createImageBitmap(src, { imageOrientation: 'flipY' });
 
 class UrlSource {
   constructor(base) { this.kind = 'url'; this.base = base; }
-  url(kind, i) { return Promise.resolve(`${this.base}${kind}/${pad(i)}.jpg`); }
+  url(kind, i) { return Promise.resolve(fileUrl(`${this.base}${kind}/${pad(i)}.jpg`)); }
   async image(kind, i) {
-    const r = await fetch(`${this.base}${kind}/${pad(i)}.jpg`);
+    const r = await fetch(fileUrl(`${this.base}${kind}/${pad(i)}.jpg`));
     if (!r.ok) throw new Error(`没有这一页：${kind}/${pad(i)}`);
     return flip(await r.blob());
   }
@@ -41,7 +54,11 @@ class Queue {
 export class PdfSource {
   constructor(bookId, pdf) { this.kind = 'pdf'; this.bookId = bookId; this.pdf = pdf; this.q = new Queue(); this.urls = new Map(); }
   static async open(bookId, data) {
-    const pdf = await pdfjs.getDocument({ data, cMapUrl: '/pdfjs/cmaps/', cMapPacked: true, standardFontDataUrl: '/pdfjs/standard_fonts/', wasmUrl: '/pdfjs/wasm/', iccUrl: '/pdfjs/iccs/', verbosity: 0 }).promise;
+    if (OFFLINE) pdfjs.GlobalWorkerOptions.workerPort = offlineWorker();
+    const files = OFFLINE
+      ? { BinaryDataFactory: EmbeddedData, useWorkerFetch: false, cMapUrl: 'embedded/', standardFontDataUrl: 'embedded/', wasmUrl: 'embedded/' }
+      : { cMapUrl: '/pdfjs/cmaps/', standardFontDataUrl: '/pdfjs/standard_fonts/', wasmUrl: '/pdfjs/wasm/', iccUrl: '/pdfjs/iccs/' };
+    const pdf = await pdfjs.getDocument({ data, cMapPacked: true, ...files, verbosity: 0 }).promise;
     return new PdfSource(bookId, pdf);
   }
   get pageCount() { return this.pdf.numPages; }
@@ -122,11 +139,24 @@ class PlaceholderSource {
   async url(kind, i) { return i === 0 ? this.cover.url(kind, 0) : null; }
 }
 
-/** 这本书用哪种书页：导入的 PDF → 本地书页图片 → 占位页 */
+// 离线包里带的课本：books/<id>.js 里是 PDF 的 base64（双击打开的网页只能用 <script> 读同一个文件夹里的东西）
+const bundledPdf = (id) => new Promise((resolve) => {
+  const s = Object.assign(document.createElement('script'), { src: `books/${id}.js` });
+  s.onload = () => { const b = window.__LB_PDF__?.[id]; if (b) delete window.__LB_PDF__[id]; resolve(b || null); s.remove(); };
+  s.onerror = () => { resolve(null); s.remove(); };
+  document.head.append(s);
+});
+
+/** 这本书用哪种书页：导入的 PDF（离线版：这台电脑上导入的 → 离线包里带的）→ 本地书页图片 → 占位页 */
 export async function createPageSource(content, manifest) {
   const rec = await getPdf(content.id);
   if (rec?.blob) {
     try { return await PdfSource.open(content.id, await rec.blob.arrayBuffer()); } catch (e) { console.warn('导入的课本打不开，改用占位页', e); }
+  }
+  if (OFFLINE) {
+    const b = await bundledPdf(content.id);
+    if (b) { try { const src = await PdfSource.open(content.id, fromB64(b.data)); src.bundled = true; return src; } catch (e) { console.warn('离线包里的课本打不开，改用占位页', e); } }
+    return new PlaceholderSource(content.base, manifest, content.spots);
   }
   if (new URLSearchParams(location.search).get('pages') === 'placeholder') return new PlaceholderSource(content.base, manifest, content.spots);          // 测试用：假装没有本地书页（导入了 PDF 时仍然用导入的）
   try { const r = await fetch(`${content.base}lo/${pad(1)}.jpg`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) return new UrlSource(content.base); } catch (e) { /* 没有书页图片 */ }
