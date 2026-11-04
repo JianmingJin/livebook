@@ -650,9 +650,21 @@ body.shelf-leave #hud-top, body.shelf-leave #hud-pager, body.shelf-leave #hint, 
 
 /* 导入课本 */
 .chip-import { border-color: rgba(255, 214, 140, .55); }
-.imp-pop { position: fixed; top: 62px; right: 18px; z-index: 60; max-width: 360px; padding: 14px 16px 12px; border-radius: 14px; background: rgba(30, 23, 18, .88); backdrop-filter: blur(10px); color: #f4ead8; font-size: 13.5px; line-height: 1.6; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
-.imp-pop p { margin: 0; }
-.imp-pop b { color: #ffd28a; }
-.imp-acts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-.imp-acts .chip.ghost { background: transparent; }
+.imp-mask { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; background: rgba(24, 19, 14, .38); }
+.imp-mask[hidden] { display: none; }
+.imp-card { position: relative; width: min(560px, 92vw); max-height: 88vh; overflow: auto; padding: 24px 26px 18px; border-radius: 16px; background: #fffcf5; color: #2a2f3a; font-size: 15px; line-height: 1.7; box-shadow: 0 18px 50px rgba(0, 0, 0, .28); }
+.imp-card h3 { margin: 0 0 6px; font-size: 20px; }
+.imp-card b { color: #23293a; }
+.imp-lead { margin: 0 0 12px; color: #4a5160; }
+.imp-book { margin: 4px 0 14px; padding: 12px 14px; border-radius: 10px; background: #f4eddd; }
+.imp-book .imp-name { font-size: 16.5px; font-weight: 600; margin: 2px 0; }
+.imp-how ol { margin: 4px 0 6px; padding-left: 20px; }
+.imp-how li { margin: 4px 0; }
+.imp-card a { color: #2c5fa8; text-decoration: underline; text-underline-offset: 2px; }
+.imp-acts { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.imp-btn { padding: 8px 18px; border-radius: 999px; border: 1px solid #2a2f3a; background: #2a2f3a; color: #fffcf5; font-size: 15px; cursor: pointer; }
+.imp-btn.ghost { background: transparent; color: #2a2f3a; border-color: rgba(42, 47, 58, .35); }
+.imp-note { margin: 10px 0 0; color: #7d8696; font-size: 13.5px; }
+.imp-x { position: absolute; top: 10px; right: 12px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: transparent; color: #7d8696; font-size: 22px; cursor: pointer; }
+.imp-x:hover { background: rgba(42, 47, 58, .07); }
 .ov-thumb.nopage { display: flex; align-items: center; justify-content: center; min-height: 92px; background: #f6f1e6; color: #7d8696; font: 15px/1 "Songti SC", "STSong", serif; letter-spacing: .04em; }
