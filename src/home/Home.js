@@ -31,6 +31,8 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   document.title = '活页课本';
   const books = bookList().filter((b) => Object.keys(getBook(b.id).lessons).length);     // 还没有做好活页的书先不上架
   const manifests = Object.fromEntries(await Promise.all(books.map(async (b) => [b.id, await (await fetch(`${getBook(b.id).base}book.json`)).json()])));
+  // 有没有书页图片（开发时有；线上只放封面）：没有的话，活页总览里的缩略图只写图号
+  const pagesOk = Object.fromEntries(await Promise.all(books.map(async (b) => { try { const r = await fetch(`${getBook(b.id).base}lo/001.jpg`, { method: 'HEAD' }); return [b.id, r.ok && (r.headers.get('content-type') || '').startsWith('image/')]; } catch (e) { return [b.id, false]; } })));
   const loader = new THREE.TextureLoader();
 
   // ---- 按科目分层（顺序照 books.json），第一科在最上面 ----
@@ -155,7 +157,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
     authorCard(),
     h('footer', { class: 'home-foot' },
       h('button', { class: 'paper-btn', onclick: () => openOverview(books, manifests, subjects) }, '⊞ 活页总览'),
-      h('span', { class: 'home-copy' }, '课本页面来自本地教材文件，仅供个人学习使用')));
+      h('span', { class: 'home-copy' }, '书里可以导入你自己下载的课本 PDF，文件只在这台电脑上使用')));
   document.body.append(ui);
   document.querySelector('#loader')?.classList.add('done');
 
@@ -353,8 +355,8 @@ function openOverview(books, manifests, subjects) {
       body.append(h('h3', {}, ch.title));
       body.append(h('div', { class: 'ov-grid' }, spots.map((s) => {
         const L = c.lessons[s.lesson], [x0, y0, x1, y1] = s.bbox, PW = man.pageSize[0], PH = man.pageSize[1];
-        const thumb = h('div', { class: 'ov-thumb' });
-        Object.assign(thumb.style, {
+        const thumb = h('div', { class: pagesOk[bid] ? 'ov-thumb' : 'ov-thumb nopage' }, pagesOk[bid] ? null : L.fig);
+        if (pagesOk[bid]) Object.assign(thumb.style, {
           backgroundImage: `url(${c.base}hi/${String(s.page).padStart(3, '0')}.jpg)`,
           backgroundSize: `${(PW / (x1 - x0)) * 100}% auto`,
           backgroundPosition: `${(x0 / (PW - (x1 - x0))) * 100}% ${(y0 / (PH - (y1 - y0))) * 100}%`,

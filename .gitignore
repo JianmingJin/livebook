@@ -16,3 +16,6 @@ tools/figures.json
 # 本地评审记录（大量带书页的截图）、浏览器调试
 review/
 tools/.browser-ws
+
+# pdf.js 的资源：npm run dev / build 前从 node_modules 拷过来
+public/pdfjs/

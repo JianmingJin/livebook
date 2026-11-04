@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { Stage } from './stage/Stage.js';
 import { PageTextures } from './book/PageTextures.js';
+import { createPageSource } from './book/PageSource.js';
+import { mountImport } from './book/importPdf.js';
 import { Book } from './book/Book.js';
 import { Hotspots } from './book/Hotspots.js';
 import { LiveLayer } from './live/LiveLayer.js';
@@ -27,7 +29,9 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
   document.title = `活页课本 · ${manifest.title}`;
 
   stage ||= new Stage($('#c'));
-  const textures = new PageTextures(content.base, manifest.pageCount, stage.renderer);
+  const source = await createPageSource(content, manifest);
+  const textures = new PageTextures(source, manifest.pageCount, stage.renderer);
+  mountImport({ content, manifest, source });
   const book = new Book(stage, manifest, textures);
   if (handoff) book.group.visible = false;
   const hotspots = new Hotspots(stage, book, content.spots);

@@ -647,3 +647,12 @@ body.book-enter #hud-top, body.book-enter #hud-pager, body.book-enter #hint, bod
 @keyframes lb-fadein { from { opacity: 0; } }
 body.shelf-leave #hud-top, body.shelf-leave #hud-pager, body.shelf-leave #hint, body.shelf-leave #copy, body.shelf-leave #viewctl { opacity: 0 !important; transition: opacity .3s; pointer-events: none; }
 .tag3d.sticky.slip { animation: none; transform-origin: left top; }
+
+/* 导入课本 */
+.chip-import { border-color: rgba(255, 214, 140, .55); }
+.imp-pop { position: fixed; top: 62px; right: 18px; z-index: 60; max-width: 360px; padding: 14px 16px 12px; border-radius: 14px; background: rgba(30, 23, 18, .88); backdrop-filter: blur(10px); color: #f4ead8; font-size: 13.5px; line-height: 1.6; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
+.imp-pop p { margin: 0; }
+.imp-pop b { color: #ffd28a; }
+.imp-acts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.imp-acts .chip.ghost { background: transparent; }
+.ov-thumb.nopage { display: flex; align-items: center; justify-content: center; min-height: 92px; background: #f6f1e6; color: #7d8696; font: 15px/1 "Songti SC", "STSong", serif; letter-spacing: .04em; }

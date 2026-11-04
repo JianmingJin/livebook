@@ -6,5 +6,7 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 export NO_PROXY="localhost,127.0.0.1,::1" no_proxy="localhost,127.0.0.1,::1"
 cd "$ROOT" && rm -rf dist && npm run build
+# 线上不放课本书页，只留封面；用户自己导入课本 PDF（见 src/book/PageSource.js）
+"$ROOT/tools/strip_pages.sh" "$ROOT/dist"
 # 在别的目录里跑 wrangler：在项目目录里它会把 Vite 项目当成 Workers 来“自动配置”，改 package.json 和 vite.config.js
 cd /tmp && npx --yes wrangler@latest pages deploy "$ROOT/dist" --project-name livebook --branch main --commit-dirty=true
