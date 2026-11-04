@@ -2,10 +2,9 @@
 // 文件只存在这台电脑的浏览器里（IndexedDB），不上传；导入以后书页、插图、结论原文都用这份课本。
 import { PdfSource } from './PageSource.js';
 import { putPdf, removePdf } from './pdfStore.js';
-import { EDITIONS, DOWNLOADERS } from '../content/editions.js';
+import { EDITIONS } from '../content/editions.js';
 
 const el = (tag, attrs = {}, ...kids) => { const e = Object.assign(document.createElement(tag), attrs); for (const k of kids.flat()) if (k != null) e.append(k); return e; };
-const link = (href, text) => el('a', { href, target: '_blank', rel: 'noopener', textContent: text });
 const QUIET = 'lb-imp-quiet';          // 点过“不用了”：不再自动出现
 
 export function mountImport({ content, manifest, source }) {
@@ -13,11 +12,12 @@ export function mountImport({ content, manifest, source }) {
   if (!actions || document.getElementById('btn-import')) return;
   const imported = source.kind === 'pdf', ed = EDITIONS[content.id];
   const pages = ed?.pages ?? manifest.pageCount;
-  const short = `${(ed?.name ?? manifest.title).replace('义务教育教科书·', '')}（人教版 2024，${pages} 页）`;
-  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: imported ? '用的是你导入的课本（只存在这台电脑上）' : '导入你自己的课本 PDF，换成原书页' });
+  const bookName = `人教版《${(ed?.name ?? manifest.title).replace('义务教育教科书·', '').replace(/ (上册|下册|全一册)$/, '$1')}》`;          // 人教版《物理 八年级下册》
+  const short = `${bookName}（2024 年版，${pages} 页）`;
+  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: imported ? '用的是导入的教材 PDF（只在本机）' : '导入这一版教材的 PDF，换成原书页' });
   actions.append(btn);
   const copy = document.getElementById('copy');          // 页脚
-  if (copy) copy.textContent = imported ? '原书页来自你导入的课本 PDF，只在这台电脑上使用' : source.kind === 'placeholder' ? '想看原书页，可以导入你自己的课本 PDF' : '课本页面来自本地教材文件，仅供个人学习使用';
+  if (copy) copy.textContent = imported ? '原书页来自导入的教材 PDF，只在本机使用' : source.kind === 'placeholder' ? '需要原书页，可自行导入这一版教材的 PDF' : '课本页面来自本地教材文件，仅供个人学习使用';
   const input = el('input', { type: 'file', accept: 'application/pdf,.pdf', hidden: true });
   document.body.append(input);
 
@@ -31,9 +31,9 @@ export function mountImport({ content, manifest, source }) {
   const show = (blink, ...kids) => { tip.replaceChildren(...kids); place(); tip.hidden = false; tip.classList.toggle('blink', !!blink); };
   const offer = (blink) => show(blink,
     el('b', { textContent: '想看原书页？' }),
-    el('p', { textContent: `导入你自己的课本 PDF 就行：${short}。只在这台电脑上用。` }),
-    el('p', { className: 'imp-how' }, '没有的话，可以用 ', link(DOWNLOADERS.parser.url, DOWNLOADERS.parser.name), ' 从', ed ? link(ed.url, '国家中小学智慧教育平台') : '国家中小学智慧教育平台', '下载', ed?.login ? '（这一本要先登录）' : '', '，或者让 WorkBuddy 这类 AI 助手帮你下。'),
-    acts(['导入', () => input.click()], ['不用了', () => { localStorage.setItem(QUIET, '1'); hide(); }, true]));
+    el('p', { textContent: `自行导入这一版教材的 PDF 就行：${short}。只在本机使用。` }),
+    el('p', { className: 'imp-how', textContent: `手边没有 PDF 的话，最简单的办法是用 WorkBuddy：把教材名称告诉它，让它找一个下载教材的 skill，从国家中小学智慧教育平台下载${ed?.login ? '（这一本要先登录平台）' : ''}。` }),
+    acts(['导入 PDF', () => input.click()], ['不用了', () => { localStorage.setItem(QUIET, '1'); hide(); }, true]));
   const say = (text, ...bs) => show(false, el('p', { innerHTML: text }), bs.length ? acts(...bs) : null);
 
   const save = async (file, n) => {
@@ -55,7 +55,7 @@ export function mountImport({ content, manifest, source }) {
   btn.onclick = () => {
     if (!tip.hidden) return hide();
     if (!imported) return offer(false);
-    show(false, el('p', { textContent: `用的是你导入的课本：${short}。只存在这台电脑上。` }),
+    show(false, el('p', { textContent: `用的是导入的教材 PDF：${short}。只在本机使用。` }),
       acts(['换一份', () => input.click()], ['移除', async () => { await removePdf(content.id); location.reload(); }, true], ['关闭', hide, true]));
   };
   input.onchange = () => { const f = input.files?.[0]; input.value = ''; doImport(f); };

@@ -13,8 +13,3 @@ export const EDITIONS = {
   'huaxue-9x': { name: '义务教育教科书·化学 九年级 下册', press: PEP, rev: REV, year: YEAR, pages: 127, isbn: '', url: SMARTEDU('1998204c-f017-4f49-9000-0ba0b93d2a4d'), login: true },
 };
 
-// 把平台上的课本下成 PDF 的工具
-export const DOWNLOADERS = {
-  parser: { name: 'tchMaterial-parser', url: 'https://github.com/happycola233/tchMaterial-parser' },
-  skill: { name: 'china-edu-book-download-skills', url: 'https://github.com/caorong/china-edu-book-download-skills' },
-};
