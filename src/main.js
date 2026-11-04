@@ -65,7 +65,10 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
   // ---------- 加载：先要封面和前几页 ----------
   // 先要封面和前几页；一打开就要翻过去的（书签页、链接里指定的页），连同翻页动画里会露出来的那几张纸一起先加载——不然翻的时候露出白纸
   const q0 = new URLSearchParams(location.hash.slice(1));
-  const startPage = q0.has('live') ? content.spots.find((x) => x.lesson === q0.get('live'))?.page : q0.has('p') ? Number(q0.get('p')) : bookmark.get(content.id);
+  // 没有原书页（占位页）时，不停在封面：直接翻开一张活页（有书签就翻开书签那里或之后的第一张，没有就第一张）
+  const spotsInOrder = [...content.spots].sort((a, b) => a.page - b.page);
+  const autoSpot = source.kind === 'placeholder' ? (spotsInOrder.find((x) => x.page >= (bookmark.get(content.id) ?? 0)) || spotsInOrder[0]) : null;
+  const startPage = q0.has('live') ? content.spots.find((x) => x.lesson === q0.get('live'))?.page : q0.has('p') ? Number(q0.get('p')) : autoSpot ? autoSpot.page : bookmark.get(content.id);
   const firstPages = [...new Set([0, 1, 2, 3, 4, ...(startPage != null ? book.turnPages(book.leafForPage(startPage), 0) : [])])];
   if (startPage != null) textures.want(book.turnPages(book.leafForPage(startPage), 0).slice(-2));          // 目的地那个跨页的高清图也先要
   let started = false;
@@ -336,7 +339,8 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
   // ---------- 深链接：#p=23 翻到 PDF 第 23 页，#live=lever 直接打开实验 ----------
   function handleHash() {
     const q = new URLSearchParams(location.hash.slice(1));
-    if (!q.has('live') && !q.has('p')) {      // 没指定：翻到上次的书签页
+    if (!q.has('live') && !q.has('p')) {      // 没指定：翻到上次的书签页（没有原书页时直接翻开活页）
+      if (autoSpot) { hideHint(); setTimeout(() => gotoPage(autoSpot.page, autoSpot), 420); return; }
       const bm = bookmark.get(content.id);
       if (bm) { hideHint(); setTimeout(() => gotoPage(bm), 420); }
       return;
