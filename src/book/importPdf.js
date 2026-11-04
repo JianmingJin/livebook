@@ -32,7 +32,7 @@ export function mountImport({ content, manifest, source }) {
   const offer = (blink) => show(blink,
     el('b', { textContent: '想看原书页？' }),
     el('p', { textContent: `自行导入这一版教材的 PDF 就行：${short}。只在本机使用。` }),
-    el('p', { className: 'imp-how', textContent: `手边没有 PDF 的话，最简单的办法是用 AI 助手，比如 WorkBuddy、豆包、千问：把教材名称告诉它，让它找一个下载教材的 skill，从国家中小学智慧教育平台下载。` }),
+    el('p', { className: 'imp-how', textContent: `手边没有 PDF 的话，最简单的办法是用 AI 助手，比如 WorkBuddy、豆包工作、千问办公：把教材名称告诉它，让它找一个下载教材的 skill，从国家中小学智慧教育平台下载。` }),
     acts(['导入 PDF', () => input.click()], ['不用了', () => { localStorage.setItem(QUIET, '1'); hide(); }, true]));
   const say = (text, ...bs) => show(false, el('p', { innerHTML: text }), bs.length ? acts(...bs) : null);
 
