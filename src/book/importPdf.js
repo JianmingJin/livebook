@@ -14,10 +14,10 @@ export function mountImport({ content, manifest, source }) {
   const imported = source.kind === 'pdf', ed = EDITIONS[content.id];
   const pages = ed?.pages ?? manifest.pageCount;
   const short = `${(ed?.name ?? manifest.title).replace('义务教育教科书·', '')}（人教版 2024，${pages} 页）`;
-  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: imported ? '用的是你导入的课本（只存在这台电脑上）' : '导入课本 PDF：只在这台电脑上用，不上传' });
+  const btn = el('button', { id: 'btn-import', className: 'chip', textContent: imported ? '课本 ✓' : '导入课本', title: imported ? '用的是你导入的课本（只存在这台电脑上）' : '导入你自己的课本 PDF，换成原书页' });
   actions.append(btn);
   const copy = document.getElementById('copy');          // 页脚
-  if (copy) copy.textContent = imported ? '课本页面来自你导入的教材文件，只在这台电脑上使用' : source.kind === 'placeholder' ? '教材需自行导入，本站不提供课本' : '课本页面来自本地教材文件，仅供个人学习使用';
+  if (copy) copy.textContent = imported ? '原书页来自你导入的课本 PDF，只在这台电脑上使用' : source.kind === 'placeholder' ? '想看原书页，可以导入你自己的课本 PDF' : '课本页面来自本地教材文件，仅供个人学习使用';
   const input = el('input', { type: 'file', accept: 'application/pdf,.pdf', hidden: true });
   document.body.append(input);
 
@@ -30,9 +30,9 @@ export function mountImport({ content, manifest, source }) {
   const acts = (...bs) => el('div', { className: 'imp-acts' }, bs.map(([t, fn, ghost]) => el('button', { className: 'imp-btn' + (ghost ? ' ghost' : ''), textContent: t, onclick: fn })));
   const show = (blink, ...kids) => { tip.replaceChildren(...kids); place(); tip.hidden = false; tip.classList.toggle('blink', !!blink); };
   const offer = (blink) => show(blink,
-    el('b', { textContent: '教材需自行导入，本站不提供课本' }),
-    el('p', { textContent: `需要完整书页时，导入对应的 PDF：${short}。只在这台电脑上用，不上传。` }),
-    el('p', { className: 'imp-how' }, '怎么获取：老师手里一般都有；没有的话，可以用 ', link(DOWNLOADERS.parser.url, DOWNLOADERS.parser.name), ' 从', ed ? link(ed.url, '国家中小学智慧教育平台') : '国家中小学智慧教育平台', '下载', ed?.login ? '（这一本要先登录平台）' : '', '，或者让 WorkBuddy 这类 AI 助手用下载课本的 skill 代劳。'),
+    el('b', { textContent: '想看原书页？' }),
+    el('p', { textContent: `导入你自己的课本 PDF 就行：${short}。只在这台电脑上用。` }),
+    el('p', { className: 'imp-how' }, '没有的话，可以用 ', link(DOWNLOADERS.parser.url, DOWNLOADERS.parser.name), ' 从', ed ? link(ed.url, '国家中小学智慧教育平台') : '国家中小学智慧教育平台', '下载', ed?.login ? '（这一本要先登录）' : '', '，或者让 WorkBuddy 这类 AI 助手帮你下。'),
     acts(['导入', () => input.click()], ['不用了', () => { localStorage.setItem(QUIET, '1'); hide(); }, true]));
   const say = (text, ...bs) => show(false, el('p', { innerHTML: text }), bs.length ? acts(...bs) : null);
 
