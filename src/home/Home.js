@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { getBook, bookList, getManifest, fileUrl, OFFLINE } from '../content/index.js';
 import { offlineButton } from './offlinePack.js';
+import { FEATURES } from '../features.js';
 import { stamps, h } from '../ui/Panel.js';
 import { tag, updateTags } from '../ui/tags.js';
 import { progress, bookmark } from './progress.js';
@@ -158,7 +159,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
     authorCard(),
     h('footer', { class: 'home-foot' },
       h('button', { class: 'paper-btn', onclick: () => openOverview(books, manifests, subjects, pagesOk) }, '⊞ 活页总览'),
-      OFFLINE ? null : offlineButton(),          // 离线版里不用再下载
+      !OFFLINE && (FEATURES.offline || import.meta.env.DEV) ? offlineButton() : null,          // 开关在 src/features.js；离线版里不用再下载
       h('span', { class: 'home-copy' }, '书里可以导入你自己下载的课本 PDF，文件只在这台电脑上使用')));
   document.body.append(ui);
   document.querySelector('#loader')?.classList.add('done');
