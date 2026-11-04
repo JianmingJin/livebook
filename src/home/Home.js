@@ -33,8 +33,8 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   document.title = '活页课本';
   const books = bookList().filter((b) => Object.keys(getBook(b.id).lessons).length);     // 还没有做好活页的书先不上架
   const manifests = Object.fromEntries(await Promise.all(books.map(async (b) => [b.id, await getManifest(b.id)])));
-  // 有没有书页图片（开发时有；线上只放封面）：没有的话，活页总览里的缩略图只写图号
-  const pagesOk = Object.fromEntries(await Promise.all(books.map(async (b) => { if (OFFLINE) return [b.id, false]; try { const r = await fetch(`${getBook(b.id).base}lo/001.jpg`, { method: 'HEAD' }); return [b.id, r.ok && (r.headers.get('content-type') || '').startsWith('image/')]; } catch (e) { return [b.id, false]; } })));
+  // 有没有书页图片（只在开发时用；线上只放封面，缓存里留着的旧图也不用）：没有的话，活页总览里的缩略图只写图号
+  const pagesOk = Object.fromEntries(await Promise.all(books.map(async (b) => { if (OFFLINE || !import.meta.env.DEV) return [b.id, false]; try { const r = await fetch(`${getBook(b.id).base}lo/001.jpg`, { method: 'HEAD' }); return [b.id, r.ok && (r.headers.get('content-type') || '').startsWith('image/')]; } catch (e) { return [b.id, false]; } })));
   const loader = new THREE.TextureLoader();
 
   // ---- 按科目分层（顺序照 books.json），第一科在最上面 ----

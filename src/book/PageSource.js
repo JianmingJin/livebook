@@ -1,7 +1,7 @@
 // 书页从哪来（三种来源，按顺序取）：
 //   1. 用户导入的课本 PDF：在浏览器里当场渲染，文件存在本机（IndexedDB），不上传；
 //      离线版（U 盘上双击打开）还可以带在离线包里：books/<id>.js（下载离线包时把这台电脑上导入的 PDF 放进去）；
-//   2. 本地渲染好的书页图片（开发时 public/books/<id>/hi|lo/NNN.jpg；线上只有封面 000）；
+//   2. 本地渲染好的书页图片（只在开发时用：public/books/<id>/hi|lo/NNN.jpg；线上只有封面 000）；
 //   3. 都没有：我们自己画的占位页（自己的纸、页眉页码、淡灰线代替正文、活页的位置留着图号）。
 // 每种来源都提供：image(kind, i) → 上下翻转好的 ImageBitmap（给 three.js 贴图）；url(kind, i) → 图片地址（给界面里的截图用，没有就是 null）。
 import * as pdfjs from 'pdfjs-dist';
@@ -159,6 +159,7 @@ export async function createPageSource(content, manifest) {
     return new PlaceholderSource(content.base, manifest, content.spots);
   }
   if (new URLSearchParams(location.search).get('pages') === 'placeholder') return new PlaceholderSource(content.base, manifest, content.spots);          // 测试用：假装没有本地书页（导入了 PDF 时仍然用导入的）
-  try { const r = await fetch(`${content.base}lo/${pad(1)}.jpg`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) return new UrlSource(content.base); } catch (e) { /* 没有书页图片 */ }
+  // 本地书页图片只在开发时用。线上不放书页，而且 Cloudflare 各地的缓存里可能还留着以前的图（删掉的文件最多留一周），不能去探
+  if (import.meta.env.DEV) try { const r = await fetch(`${content.base}lo/${pad(1)}.jpg`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) return new UrlSource(content.base); } catch (e) { /* 没有书页图片 */ }
   return new PlaceholderSource(content.base, manifest, content.spots);
 }
