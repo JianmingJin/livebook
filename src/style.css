@@ -349,7 +349,7 @@ body.home #hud-top, body.home #hud-pager, body.home #hint, body.home #copy, body
 #home { position: fixed; inset: 0; pointer-events: none; z-index: 5; font-family: var(--song); color: #2c3245; transition: opacity .5s; }
 #home > * { pointer-events: auto; }
 #home.leaving { opacity: 0; }
-.home-top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: max(22px, env(safe-area-inset-top)) 28px 0; pointer-events: none; }
+.home-top { position: absolute; z-index: 1; left: 0; right: 0; top: 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: max(22px, env(safe-area-inset-top)) 28px 0; pointer-events: none; }
 .home-top > * { pointer-events: auto; }
 .home-brand b { display: block; font: 700 30px/1 var(--song); letter-spacing: .14em; color: #2c3245; }
 .home-brand span { display: block; margin-top: 10px; font: 20px/1.4 "Kaiti SC", "STKaiti", "KaiTi", var(--song); color: #4a3f2f; letter-spacing: .2em; }      /* 标语：用楷体，像题在书上的一句话 */

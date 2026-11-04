@@ -38,8 +38,8 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   // ---- 按科目分层（顺序照 books.json），第一科在最上面 ----
   const subjects = [];
   for (const b of books) {
-    let s = subjects.find((x) => x.name === b.subject);
-    if (!s) subjects.push((s = { name: b.subject, color: b.color, books: [] }));
+    let s = subjects.find((x) => x.name === b.subject && x.publisher === b.publisher);          // 同一科不同版本分开放
+    if (!s) subjects.push((s = { name: b.subject, publisher: b.publisher, color: b.color, books: [] }));
     s.books.push(b);
   }
   const n = subjects.length;
@@ -86,9 +86,9 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(14, 7), new THREE.MeshLambertMaterial({ color: 0xf3ece2, emissive: 0xf3ece2, emissiveIntensity: 0.42 }));
   wall.position.set(0, 3.5, ZF - DEPTH - 0.014); wall.receiveShadow = true; group.add(wall);
 
-  // 每层前沿的小铜框标签：科目，几册 · 几张活页
+  // 每层前沿的小铜框标签：科目，版本 · 几册 · 几张活页
   subjects.forEach((s, i) => {
-    const k = n - 1 - i, card = labelCard(s.name, `${s.books.length} 册 · ${s.leaves} 张活页`, s.color);
+    const k = n - 1 - i, card = labelCard(s.name, `${s.publisher} · ${s.books.length} 册 · ${s.leaves} 张活页`, s.color);
     card.position.set(0, yRest(k) - APRON / 2 + 0.002, ZF + 0.0012); group.add(card);
   });
 
@@ -156,7 +156,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
       next ? h('a', { class: 'note-card next', href: next.href }, h('small', {}, last ? '接着学' : '从这里开始'), h('b', {}, next.title), h('span', {}, next.where)) : null),
     authorCard(),
     h('footer', { class: 'home-foot' },
-      h('button', { class: 'paper-btn', onclick: () => openOverview(books, manifests, subjects) }, '⊞ 活页总览'),
+      h('button', { class: 'paper-btn', onclick: () => openOverview(books, manifests, subjects, pagesOk) }, '⊞ 活页总览'),
       h('span', { class: 'home-copy' }, '书里可以导入你自己下载的课本 PDF，文件只在这台电脑上使用')));
   document.body.append(ui);
   document.querySelector('#loader')?.classList.add('done');
@@ -167,7 +167,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   const showSlip = (g) => {
     if (!g) { slip.show(false); return; }
     const u = g.userData, p = progress(u.id, manifests[u.id]);
-    slip.text(`<b>${u.b.title}</b><br>${p.where} · <span>活页 ${p.done}/${p.total}</span>`).loc(g, u.W * 0.28, u.T / 2 + 0.01, COVER_H * 0.36).show(true);
+    slip.text(`<b>${u.b.full}</b><br>${p.where} · <span>活页 ${p.done}/${p.total}</span>`).loc(g, u.W * 0.28, u.T / 2 + 0.01, COVER_H * 0.36).show(true);
   };
 
   // ---- 指针：悬停抽出一点，点击拿下来 ----
@@ -306,7 +306,7 @@ function nextLesson(books, last) {
     const s = after.find((x) => !stamps.has(x.lesson)) || spots.find((x) => !stamps.has(x.lesson));
     if (s) {
       const L = c.lessons[s.lesson];
-      return { href: `?book=${bid}#live=${s.lesson}`, title: L.title, where: `${c.title} · ${L.fig} · ${L.sec}` };
+      return { href: `?book=${bid}#live=${s.lesson}`, title: L.title, where: `${c.full} · ${L.fig} · ${L.sec}` };
     }
   }
   return null;
@@ -318,10 +318,10 @@ function searchBox(books, manifests) {
   for (const b of books) {
     const c = getBook(b.id), man = manifests[b.id];
     for (const ch of man.chapters) {
-      if (ch.page != null) entries.push({ kind: '章', title: ch.title, where: b.title, href: `?book=${b.id}#p=${ch.page}` });
-      for (const s of ch.sections) if (s.page != null) entries.push({ kind: '节', title: s.title.replace(/^第.节\s*/, ''), where: `${b.title} · ${ch.title}`, href: `?book=${b.id}#p=${s.page}` });
+      if (ch.page != null) entries.push({ kind: '章', title: ch.title, where: b.full, href: `?book=${b.id}#p=${ch.page}` });
+      for (const s of ch.sections) if (s.page != null) entries.push({ kind: '节', title: s.title.replace(/^第.节\s*/, ''), where: `${b.full} · ${ch.title}`, href: `?book=${b.id}#p=${s.page}` });
     }
-    for (const [id, L] of Object.entries(c.lessons)) entries.push({ kind: '活页', title: L.title, where: `${b.title} · ${L.fig} · ${L.sec}`, href: `?book=${b.id}#live=${id}`, done: stamps.has(id) });
+    for (const [id, L] of Object.entries(c.lessons)) entries.push({ kind: '活页', title: L.title, where: `${b.full} · ${L.fig} · ${L.sec}`, href: `?book=${b.id}#live=${id}`, done: stamps.has(id) });
   }
   const input = h('input', { type: 'search', placeholder: '搜一节课或一张活页，比如“凸透镜”“电解水”' });
   const list = h('div', { class: 'search-list', hidden: true });
@@ -339,7 +339,7 @@ function searchBox(books, manifests) {
 }
 
 /** 活页总览：按科目、按书、按章节排的活页卡片，缩略图截取课本上的原图 */
-function openOverview(books, manifests, subjects) {
+function openOverview(books, manifests, subjects, pagesOk) {
   const body = h('div', { class: 'ov-body' });
   const tabs = h('div', { class: 'ov-tabs' });
   const show = (bid) => {
@@ -367,9 +367,9 @@ function openOverview(books, manifests, subjects) {
       })));
     }
   };
-  // 标签按科目分组：物理［八年级上册 八年级下册 九年级全一册］ 化学［九年级上册 九年级下册］
+  // 标签按科目分组：人教版 物理［八年级上册 八年级下册 九年级全一册］ 人教版 化学［九年级上册 九年级下册］
   for (const s of subjects) {
-    tabs.append(h('span', { class: 'ov-subj', style: `--c:${s.color}` }, s.name));
+    tabs.append(h('span', { class: 'ov-subj', style: `--c:${s.color}` }, `${s.publisher} ${s.name}`));
     for (const b of s.books) tabs.append(h('button', { 'data-id': b.id, style: `--c:${s.color}`, onclick: () => show(b.id) }, b.vol));
   }
   const sheet = h('div', { id: 'overview' },

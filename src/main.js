@@ -25,8 +25,8 @@ const BOOK_ID = params.get('book');
 async function bootBook(id, { stage = null, handoff = null } = {}) {
   const content = getBook(id);
   const manifest = await (await fetch(`${content.base}book.json`)).json();
-  $('#book-title').textContent = manifest.title;
-  document.title = `活页课本 · ${manifest.title}`;
+  $('#book-title').textContent = content.full;
+  document.title = `活页课本 · ${content.full}`;
 
   stage ||= new Stage($('#c'));
   const source = await createPageSource(content, manifest);
@@ -39,7 +39,7 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
   const live = new LiveLayer({ stage, book, textures, hotspots, panel, content, onChange: (open) => {
     updateUI();
     const a = live.active;
-    if (open && a) { const L = content.lessons[a.spot.lesson]; rememberLast({ book: content.id, page: a.spot.page, lesson: a.spot.lesson, title: L.title, where: `${manifest.title} · ${L.fig} · ${L.sec}` }); bookmark.set(content.id, a.spot.page); }
+    if (open && a) { const L = content.lessons[a.spot.lesson]; rememberLast({ book: content.id, page: a.spot.page, lesson: a.spot.lesson, title: L.title, where: `${content.full} · ${L.fig} · ${L.sec}` }); bookmark.set(content.id, a.spot.page); }
   } });
   stage.updaters.add(() => updateTags(stage.camera));
 
@@ -107,7 +107,7 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
     if (type === 'turned' && book.current > 0) {
       const pg = book.spread[1] ?? book.spread[0];
       bookmark.set(content.id, pg);
-      if (!live.isOpen) rememberLast({ book: content.id, page: pg, title: `${manifest.title} ${pageLabel()}`, where: '接着往下翻' });
+      if (!live.isOpen) rememberLast({ book: content.id, page: pg, title: `${content.full} ${pageLabel()}`, where: '接着往下翻' });
     }
     if (type === 'turned' && pendingLesson) {
       const s = pendingLesson; pendingLesson = null;
@@ -154,7 +154,7 @@ async function bootBook(id, { stage = null, handoff = null } = {}) {
         const done = Object.keys(c.lessons).filter((id) => stamps.has(id)).length;
         body.append(h('div', { class: `live-item ${b.id === content.id ? 'cur' : ''}`, onclick: () => { location.href = `?book=${b.id}`; } },
           h('div', { class: 'seal book' }, b.vol.replace('年级', '').replace('全一册', '全')),
-          h('div', {}, h('h4', {}, b.title), h('p', {}, `活页 ${Object.keys(c.lessons).length} 张 · 已盖章 ${done}`))));
+          h('div', {}, h('h4', {}, b.full), h('p', {}, `活页 ${Object.keys(c.lessons).length} 张 · 已盖章 ${done}`))));
       }
     } else {
       $('#drawer-title').textContent = '这本书的活页';

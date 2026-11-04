@@ -5,6 +5,9 @@ const modules = import.meta.glob('../lessons/*.js');
 
 export const BOOK_IDS = Object.keys(books);
 
+// 显示用的书名，前面带版本：“人教版 物理 八年级下册”（以后有别的版本也分得清）
+const fullTitle = (b) => `${b.publisher || '人教版'} ${b.title}`;
+
 export function getBook(id) {
   const b = books[id] || books['wuli-8x'];
   const lessons = {};
@@ -12,7 +15,7 @@ export function getBook(id) {
     const load = modules[`../lessons/${lid}.js`];
     if (load) lessons[lid] = { ...meta, load };          // 还没写的实验先不挂出来
   }
-  return { ...b, lessons, spots: b.spots.filter((s) => lessons[s.lesson]), planned: Object.keys(b.lessons).length };
+  return { ...b, full: fullTitle(b), lessons, spots: b.spots.filter((s) => lessons[s.lesson]), planned: Object.keys(b.lessons).length };
 }
 
 // 科目：书名“物理 八年级上册”的前半截。颜色取自课本封面（物理偏青蓝、化学偏紫），首页的分隔标签、书的侧边用它
@@ -26,6 +29,6 @@ export const subjectOf = (title) => title.split(' ')[0];
 export function bookList() {
   return BOOK_IDS.map((id) => {
     const t = books[id].title, [subject, ...rest] = t.split(' ');
-    return { id, title: t, subject, vol: rest.join(' ') || t, publisher: books[id].publisher || '人教版', ...(SUBJECTS[subject] || OTHER) };
+    return { id, title: t, full: fullTitle(books[id]), subject, vol: rest.join(' ') || t, publisher: books[id].publisher || '人教版', ...(SUBJECTS[subject] || OTHER) };
   });
 }
