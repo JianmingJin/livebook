@@ -28,7 +28,7 @@ export function mountImport({ content, manifest, source }) {
   addEventListener('resize', () => { if (!tip.hidden) place(); });
   const hide = () => { tip.hidden = true; tip.classList.remove('blink'); };
   const acts = (...bs) => el('div', { className: 'imp-acts' }, bs.map(([t, fn, ghost]) => el('button', { className: 'imp-btn' + (ghost ? ' ghost' : ''), textContent: t, onclick: fn })));
-  const show = (blink, ...kids) => { tip.replaceChildren(...kids); place(); tip.hidden = false; tip.classList.toggle('blink', !!blink); };
+  const show = (blink, ...kids) => { tip.replaceChildren(...kids.filter(Boolean)); place(); tip.hidden = false; tip.classList.toggle('blink', !!blink); };          // 空的不要放进去（不然会显示成“null”）
   const offer = (blink) => show(blink,
     el('b', { textContent: '想看原书页？' }),
     el('p', { textContent: `自行导入这一版教材的 PDF 就行：${short}。只在本机使用。` }),

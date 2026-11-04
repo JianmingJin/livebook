@@ -124,12 +124,11 @@ class PlaceholderSource {
 
 /** 这本书用哪种书页：导入的 PDF → 本地书页图片 → 占位页 */
 export async function createPageSource(content, manifest) {
-  const force = new URLSearchParams(location.search).get('pages');          // 测试用：?pages=placeholder 强制用占位页
-  if (force === 'placeholder') return new PlaceholderSource(content.base, manifest, content.spots);
   const rec = await getPdf(content.id);
   if (rec?.blob) {
     try { return await PdfSource.open(content.id, await rec.blob.arrayBuffer()); } catch (e) { console.warn('导入的课本打不开，改用占位页', e); }
   }
+  if (new URLSearchParams(location.search).get('pages') === 'placeholder') return new PlaceholderSource(content.base, manifest, content.spots);          // 测试用：假装没有本地书页（导入了 PDF 时仍然用导入的）
   try { const r = await fetch(`${content.base}lo/${pad(1)}.jpg`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) return new UrlSource(content.base); } catch (e) { /* 没有书页图片 */ }
   return new PlaceholderSource(content.base, manifest, content.spots);
 }
