@@ -64,12 +64,27 @@ export default {
 
     // 蜡烛 A（点燃）、B（不点燃），以及“像”A′（半透明，在镜后对称处）
     const eye = new THREE.Vector3();
+    const { width, height } = glass.geometry.parameters;
+    const corners = [[-1, 0], [1, 0], [1, 1], [-1, 1]].map(([x, y]) =>
+      new THREE.Vector3(x * width / 2, y * height, 0));
+    const clipPlanes = corners.map(() => new THREE.Plane());
+    const imageCenter = new THREE.Vector3();
     const sizes = [0.07, 0.05];
     const A = candle({ height: sizes[0], r: 0.008, color: 0xf0e6d2 });
     const B = candle({ height: sizes[0], r: 0.008, color: 0xf0e6d2 });
     B.flame.setOn(false);
     const img = candle({ height: sizes[0], r: 0.008, color: 0xf0e6d2 });
-    img.traverse((o) => { if (o.material) { o.material = o.material.clone(); o.material.transparent = true; o.material.opacity = 0.42; o.material.depthWrite = false; } });
+    // 虚像不向场景投光、投影。烛身、火焰和光晕共用玻璃板边缘的裁切面。
+    img.flame.remove(...img.flame.children.filter((o) => o.isLight));
+    img.traverse((o) => {
+      if (!o.material) return;
+      o.castShadow = false;
+      o.material = o.material.clone();
+      o.material.transparent = true;
+      o.material.opacity = 0.42;
+      o.material.depthWrite = false;
+      o.material.clippingPlanes = clipPlanes;
+    });
     img.renderOrder = 4;
     group.add(A, B, img);
 
@@ -211,7 +226,18 @@ export default {
         // 按镜头所在的一侧判断，拖动绕行和按钮切换机位都走这里。
         const front = group.worldToLocal(camera.getWorldPosition(eye)).z > 0;
         img.visible = front;
-        tImg.show(front || S.screen).text(S.screen ? (front ? '透过玻璃看：像还在光屏这里' : '光屏上什么也没有') : 'A 的像');
+        let throughGlass = false;
+        if (front) {
+          // 每条板边和视点确定一个裁切面，四个面只保留透过玻璃轮廓看到的部分。
+          imageCenter.copy(img.position).y += sizes[S.size] / 2;
+          group.localToWorld(imageCenter);
+          for (let i = 0; i < corners.length; i++) {
+            clipPlanes[i].setFromCoplanarPoints(eye, corners[(i + 1) % 4], corners[i])
+              .applyMatrix4(group.matrixWorld);
+          }
+          throughGlass = clipPlanes.every((plane) => plane.distanceToPoint(imageCenter) >= 0);
+        }
+        tImg.show(throughGlass || (!front && S.screen)).text(S.screen ? (front ? '透过玻璃看：像还在光屏这里' : '光屏上什么也没有') : 'A 的像');
         A.flame.update(t); B.flame.update(t + 0.3); img.flame.update(t);
       },
     };
