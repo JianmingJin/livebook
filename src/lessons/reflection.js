@@ -32,6 +32,7 @@ export default {
     // 平面镜（镜面和实验台板顶面同高：画的时候让镜面略微靠前，免得两者重合闪烁）
     const mirror = inked(new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.006, 0.16), [paint(0x9aa8b8), paint(0x9aa8b8), new THREE.MeshPhongMaterial({ color: 0xcfe3f2, shininess: 120, specular: 0xffffff, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 }), paint(0x9aa8b8), paint(0x9aa8b8), paint(0x9aa8b8)]));
     mirror.position.y = -0.003;
+    mirror.userData.qaSupport = true;
     group.add(mirror);
 
     // 纸板（两半，各一张画布：量角刻度 + 笔迹）
