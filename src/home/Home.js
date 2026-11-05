@@ -5,7 +5,7 @@
 // 屏幕上还有：继续上次 / 接着学（贴在墙上的两张便签）、搜一节课或一张活页、活页总览。
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import { getBook, bookList, getManifest, fileUrl, OFFLINE } from '../content/index.js';
+import { getBook, bookList, bookHref, getManifest, fileUrl, OFFLINE } from '../content/index.js';
 import { offlineButton } from './offlinePack.js';
 import { FEATURES } from '../features.js';
 import { stamps, h } from '../ui/Panel.js';
@@ -27,7 +27,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   const q = new URLSearchParams(location.hash.slice(1));
   if (q.has('live')) {
     const b = bookList().find((x) => getBook(x.id).lessons[q.get('live')]);
-    if (b) { location.replace(`?book=${b.id}${location.hash}`); return; }
+    if (b) { location.replace(`${bookHref(b.id)}${location.hash}`); return; }
   }
   document.body.classList.add('home');
   document.title = '活页课本';
@@ -195,7 +195,7 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   function openBook(id) {
     if (leaving) return;
     const g = items.find((x) => x.userData.id === id);
-    if (!g) { location.href = `?book=${id}`; return; }
+    if (!g) { location.href = bookHref(id); return; }
     leaving = g; hover = null; showSlip(null); canvas.style.cursor = '';
     ui.classList.add('leaving');
     g.userData.dir = 1;
@@ -205,8 +205,8 @@ export async function bootHome(stage, { enterBook = null } = {}) {
   // 书落到书桌上、镜头停稳了：就在这个舞台上换成书里那本书
   function enter(g) {
     const u = g.userData;
-    if (!enterBook) { location.href = `?book=${u.id}`; return; }
-    history.pushState(null, '', `?book=${u.id}`);
+    if (!enterBook) { location.href = bookHref(u.id); return; }
+    history.pushState(null, '', bookHref(u.id));
     ac.abort(); ui.remove(); slip.remove(); stage.updaters.delete(tick);
     // 书架、墙、别的书都在镜头外面了（镜头在低头看书桌）：先收走；拿下来的这本留着，等书里那本书的封面画好了再收
     for (const o of [...group.children]) if (o !== g) { group.remove(o); disposeTree(o); }
@@ -309,7 +309,7 @@ function nextLesson(books, last) {
     const s = after.find((x) => !stamps.has(x.lesson)) || spots.find((x) => !stamps.has(x.lesson));
     if (s) {
       const L = c.lessons[s.lesson];
-      return { href: `?book=${bid}#live=${s.lesson}`, title: L.title, where: `${c.full} · ${L.fig} · ${L.sec}` };
+      return { href: `${bookHref(bid)}#live=${s.lesson}`, title: L.title, where: `${c.full} · ${L.fig} · ${L.sec}` };
     }
   }
   return null;
@@ -321,10 +321,10 @@ function searchBox(books, manifests) {
   for (const b of books) {
     const c = getBook(b.id), man = manifests[b.id];
     for (const ch of man.chapters) {
-      if (ch.page != null) entries.push({ kind: '章', title: ch.title, where: b.full, href: `?book=${b.id}#p=${ch.page}` });
-      for (const s of ch.sections) if (s.page != null) entries.push({ kind: '节', title: s.title.replace(/^第.节\s*/, ''), where: `${b.full} · ${ch.title}`, href: `?book=${b.id}#p=${s.page}` });
+      if (ch.page != null) entries.push({ kind: '章', title: ch.title, where: b.full, href: `${bookHref(b.id)}#p=${ch.page}` });
+      for (const s of ch.sections) if (s.page != null) entries.push({ kind: '节', title: s.title.replace(/^第.节\s*/, ''), where: `${b.full} · ${ch.title}`, href: `${bookHref(b.id)}#p=${s.page}` });
     }
-    for (const [id, L] of Object.entries(c.lessons)) entries.push({ kind: '活页', title: L.title, where: `${b.full} · ${L.fig} · ${L.sec}`, href: `?book=${b.id}#live=${id}`, done: stamps.has(id) });
+    for (const [id, L] of Object.entries(c.lessons)) entries.push({ kind: '活页', title: L.title, where: `${b.full} · ${L.fig} · ${L.sec}`, href: `${bookHref(b.id)}#live=${id}`, done: stamps.has(id) });
   }
   const input = h('input', { type: 'search', placeholder: '搜一节课或一张活页，比如“凸透镜”“电解水”' });
   const list = h('div', { class: 'search-list', hidden: true });
@@ -365,7 +365,7 @@ function openOverview(books, manifests, subjects, pagesOk) {
           backgroundPosition: `${(x0 / (PW - (x1 - x0))) * 100}% ${(y0 / (PH - (y1 - y0))) * 100}%`,
           aspectRatio: `${x1 - x0} / ${y1 - y0}`,
         });
-        return h('a', { class: 'ov-card', href: `?book=${bid}#live=${s.lesson}` }, thumb,
+        return h('a', { class: 'ov-card', href: `${bookHref(bid)}#live=${s.lesson}` }, thumb,
           h('b', {}, L.title), h('span', {}, `${L.fig} · 第 ${s.page - man.pageOffset} 页`), stamps.has(s.lesson) ? h('i', { class: 'ov-done' }, '已做') : null);
       })));
     }

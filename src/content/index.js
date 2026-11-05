@@ -41,3 +41,25 @@ export function bookList() {
     return { id, title: t, full: fullTitle(books[id]), subject, vol: rest.join(' ') || t, publisher: books[id].publisher || '人教版', ...(SUBJECTS[subject] || OTHER) };
   });
 }
+
+// 路径沿用书架上的科目、版本和册名，CF 可以直接按教材区分浏览量。
+const bookPaths = new Map(bookList().map(({ id, subject, publisher, vol }) =>
+  [id, '/' + [subject, publisher, vol].map(encodeURIComponent).join('/')]));
+
+export const bookHref = (id) => OFFLINE ? `?book=${id}` : bookPaths.get(id);
+export const shelfHref = () => OFFLINE ? location.pathname : '/';
+
+export function currentBookId() {
+  const path = location.pathname.replace(/\/$/, '');
+  const legacy = new URLSearchParams(location.search);
+  for (const [id, bookPath] of bookPaths) {
+    if (!OFFLINE && path === bookPath) return id;
+  }
+  const id = legacy.get('book');
+  if (!OFFLINE && bookPaths.has(id)) {
+    legacy.delete('book');
+    const query = legacy.toString();
+    history.replaceState(history.state, '', bookHref(id) + (query ? '?' + query : '') + location.hash);
+  }
+  return id;
+}
