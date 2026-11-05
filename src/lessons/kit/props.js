@@ -102,6 +102,7 @@ export function beaker({ r = 0.05, h = 0.1, color = C.water, level = 0.06, spout
     g.add(plate);
   }
   const lmat = paint(color, { unique: true, transparent: true, opacity, depthWrite: false });
+  lmat.userData.see = true;   // 液体允许探头、加热丝浸入。
   const liquid = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.95, r * 0.93, 1, 40), lmat);
   liquid.geometry.translate(0, 0.5, 0);
   liquid.position.y = 0.004;
