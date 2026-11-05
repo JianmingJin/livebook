@@ -403,10 +403,14 @@ export class LiveLayer {
     const A = this.active;
     if (A && !A.closing && A.nb && A.nb.pointerDown(this._ray(ndc))) return true;
     if (!A || A.closing) return false;
-    // 特殊机位下：点到器材照常操作（比如凑近看标尺时拖游码），点空白处才回到原来的机位
     if (A.inst.pointer?.down && A.inst.pointer.down(this._ray(ndc), e)) return true;
-    if (this._lookExit) { const f = this._lookExit; this._lookExit = null; f(); return true; }
     return false;
+  }
+
+  exitLook() {
+    const onExit = this._lookExit;
+    this._lookExit = null;
+    onExit?.();
   }
 
   pointerMove(ndc, e) {
