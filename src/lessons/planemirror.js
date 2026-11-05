@@ -22,7 +22,7 @@ export default {
     src: '课本第 98–100 页 · 第四章 第3节 平面镜成像',
   },
 
-  create({ tag, look, back }) {
+  create({ tag, look, back, camera }) {
     const group = new THREE.Group();
 
     // 白纸 + 画在纸上的镜面线
@@ -63,6 +63,7 @@ export default {
     group.add(glass);
 
     // 蜡烛 A（点燃）、B（不点燃），以及“像”A′（半透明，在镜后对称处）
+    const eye = new THREE.Vector3();
     const sizes = [0.07, 0.05];
     const A = candle({ height: sizes[0], r: 0.008, color: 0xf0e6d2 });
     const B = candle({ height: sizes[0], r: 0.008, color: 0xf0e6d2 });
@@ -107,15 +108,11 @@ export default {
       if (S.screen) B.position.set(-0.15, 0, -0.14); else B.position.set(S.bx, 0, -S.bz);
       const err = Math.hypot(S.bx - S.ax, S.bz - S.az);
       const ok = err < 0.006 && !S.screen;
-      // B 和像重合时，看起来 B 也“点燃”了
-      B.flame.setOn(ok);
-      // 透过玻璃板看，像还在（虚像由反射光的反向延长线形成，光屏挡不住）；绕到后面直接看光屏，屏上什么都没有
-      img.visible = !(S.screen && S.behind);
       screen.visible = S.screen;
       if (S.screen) screen.position.set(S.ax, 0.045, -S.az);
       tA.loc(group, S.ax, sizes[S.size] + 0.045, S.az);
       tB.loc(group, S.bx, 0.12, -S.bz).text(ok ? '蜡烛 B ✓ 与像重合' : '蜡烛 B').show(!S.screen);
-      tImg.loc(group, S.ax, sizes[S.size] + 0.045, -S.az).text(S.screen ? (S.behind ? '光屏上什么也没有' : '透过玻璃看：像还在光屏这里') : 'A 的像');
+      tImg.loc(group, S.ax, sizes[S.size] + 0.045, -S.az);
       if (G) {
         G.out.set('a', S.az * 100, 1); G.out.set('b', S.bz * 100, 1);
         G.out.set('ok', ok ? '重合了 ✓' : err < 0.02 ? '快重合了' : '没有重合');
@@ -210,7 +207,13 @@ export default {
         ui.status('玻璃板后面看到了 A 的像。拖动蜡烛 B 去找它。');
         layout();
       },
-      update(dt, t) { A.flame.update(t); B.flame.update(t + 0.3); img.flame.update(t); },
+      update(dt, t) {
+        // 按镜头所在的一侧判断，拖动绕行和按钮切换机位都走这里。
+        const front = group.worldToLocal(camera.getWorldPosition(eye)).z > 0;
+        img.visible = front;
+        tImg.show(front || S.screen).text(S.screen ? (front ? '透过玻璃看：像还在光屏这里' : '光屏上什么也没有') : 'A 的像');
+        A.flame.update(t); B.flame.update(t + 0.3); img.flame.update(t);
+      },
     };
   },
 };
