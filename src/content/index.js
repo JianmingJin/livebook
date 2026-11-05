@@ -42,9 +42,14 @@ export function bookList() {
   });
 }
 
-// 路径沿用书架上的科目、版本和册名，CF 可以直接按教材区分浏览量。
-const bookPaths = new Map(bookList().map(({ id, subject, publisher, vol }) =>
-  [id, '/' + [subject, publisher, vol].map(encodeURIComponent).join('/')]));
+// Keep public paths stable when the display titles change. PEP = People's Education Press.
+const bookPaths = new Map([
+  ['wuli-8s', '/physics/pep/grade-8-vol-1'],
+  ['wuli-8x', '/physics/pep/grade-8-vol-2'],
+  ['wuli-9', '/physics/pep/grade-9'],
+  ['huaxue-9s', '/chemistry/pep/grade-9-vol-1'],
+  ['huaxue-9x', '/chemistry/pep/grade-9-vol-2'],
+]);
 
 export const bookHref = (id) => OFFLINE ? `?book=${id}` : bookPaths.get(id);
 export const shelfHref = () => OFFLINE ? location.pathname : '/';
